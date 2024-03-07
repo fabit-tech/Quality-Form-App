@@ -1,0 +1,84 @@
+﻿@model List<QuailtyForm.Models.Urun>
+
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+
+
+<h2>Kalite Kontrol İsmi Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+@* <h2>Proje Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+<h2>Blok Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+<h2>Kat Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select> *@
+
+<h2>Kategori 1 Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+<h2>Kategori 2 Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+<h2>Kategori 3 Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+
+<h2>Kategori 4 Seçimi</h2>
+
+<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Lütfen bir proje seçin...</option>
+</select>
+
+
+<script>
+    $(document).ready(function () {
+        $('#urunSelect').select2({
+            ajax: {
+                url: '/api/urunler', // API endpointiniz
+                dataType: 'json',
+                delay: 250, // kullanıcı yazmayı bıraktıktan sonra sorgu yapmak için bekleme süresi (milisaniye)
+                data: function (params) {
+                    return {
+                        q: params.term // arama terimi, kullanıcının yazdığı metin
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items // API'den dönen veriyi işleyin
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1 // kullanıcı en az bir karakter yazmadan önce sorgu yapmaz
+        });
+    });
+</script>
