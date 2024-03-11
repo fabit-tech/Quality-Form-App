@@ -1,0 +1,179 @@
+﻿@model QuailtyForm.ViewModels.ComplexFormViewModel
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+
+<select id="companySelect" asp-items="@(new SelectList(Model.Companies, "Id", "CoCode"))">
+    <option value="">Şirket seçin...</option>
+</select>
+
+<select id="projectSelect" asp-items="@(new SelectList(Model.Projects, "Id","DisplayText"))">
+    <option value="">Proje seçin...</option>
+</select>
+
+@* <select id="categorySelect" asp-items="@(new SelectList(Model.Categories1, "Id", "Description"))">
+    <option value="">Kategori 1 seçin...</option>
+</select>
+
+<select id="categorySelect" asp-items="@(new SelectList(Model.Categories2, "Id", "Description"))">
+    <option value="">Kategori 2 seçin...</option>
+</select>
+ *@
+
+
+<select id="category1Select" asp-items="@(new SelectList(Model.Categories1, "Id", "Description"))">
+    <option value="">Kategori 1 seçin...</option>
+</select>
+
+<select id="category2Select">
+    <option value="">Önce Kategori 1 seçin...</option>
+</select>
+
+<select id="category3Select">
+    <option value="">Önce Kategori 2 seçin...</option>
+</select>
+
+@* <select id="category4Select">
+    <option value="">Önce Kategori 3 seçin...</option>
+</select> *@
+
+<select id="categorySelect" asp-items="@(new SelectList(Model.Categories4, "Id", "Description"))">
+    <option value="">Kategori4 seçin...</option>
+</select>
+
+<button id="listeleButton">Listele</button>
+
+<table id="questionsTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Soru Metni</th>
+            <!-- Diğer sütun başlıkları -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Buraya AJAX ile veriler eklenecek -->
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+        $('#listeleButton').click(function () {
+            var category1Id = $('#category1Select').val();
+            var category2Id = $('#category2Select').val();
+            var category3Id = $('#category3Select').val();
+
+            $.ajax({
+                url: '@Url.Action("GetQuestionData", "Form")',
+                type: 'GET',
+                data: {
+                    category1Id: category1Id,
+                    category2Id: category2Id,
+                    category3Id: category3Id
+                },
+                success: function (data) {
+                    var tableBody = $('#questionsTable tbody');
+                    tableBody.empty(); // Mevcut içeriği temizle
+
+                    $.each(data, function (index, item) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(item.id));
+                        row.append($('<td>').text(item.question_Text));
+                        // Diğer alanlar için benzer eklemeler yapabilirsiniz
+                        tableBody.append(row);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata:", error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        // Category1 değişikliğinde Category2'yi güncelle
+        $('#category1Select').change(function () {
+            var selectedCategoryId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetCategory2Data", "Form")',
+                type: 'GET',
+                data: { parentId: selectedCategoryId },
+                success: function (data) {
+                    var category2Select = $('#category2Select');
+                    category2Select.empty();
+                    category2Select.append($('<option>', { value: '', text: 'Kategori 2 seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        category2Select.append($('<option>', {
+                            value: item.id,
+                            text: item.description
+                        }));
+                    });
+                }
+            });
+        });
+
+        // Category2 değişikliğinde Category3'ü güncelle
+        $('#category2Select').change(function () {
+            var selectedCategoryId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetCategory3Data", "Form")',
+                type: 'GET',
+                data: { parentId: selectedCategoryId },
+                success: function (data) {
+                    var category3Select = $('#category3Select');
+                    category3Select.empty();
+                    category3Select.append($('<option>', { value: '', text: 'Kategori 3 seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        category3Select.append($('<option>', {
+                            value: item.id,
+                            text: item.description
+                        }));
+                    });
+                }
+            });
+        });
+
+        // Category3 değişikliğinde Category4'ü güncelle
+        // $('#category3Select').change(function () {
+        //     var selectedCategoryId = $(this).val();
+
+        //     $.ajax({
+        //         url: '@Url.Action("GetCategory4Data", "Form")',
+        //         type: 'GET',
+        //         data: { parentId: selectedCategoryId },
+        //         success: function (data) {
+        //             var category4Select = $('#category4Select');
+        //             category4Select.empty();
+        //             category4Select.append($('<option>', { value: '', text: 'Kategori 4 seçin...' }));
+
+        //             $.each(data, function (index, item) {
+        //                 category3Select.append($('<option>', {
+        //                     value: item.id,
+        //                     text: item.description
+        //                 }));
+        //             });
+        //         }
+        //     });
+        // });
+    });
+</script>
+
+
+

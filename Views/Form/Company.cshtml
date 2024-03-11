@@ -1,4 +1,4 @@
-﻿@model List<QuailtyForm.Models.Urun>
+﻿@model List<QuailtyForm.Models.Company>
 
 <!-- Select2 CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -9,35 +9,16 @@
 
 
 
-<h2>Kalite Kontrol İsmi Seçimi</h2>
+<h2>Şirket</h2>
 
-<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
-    <option value="">Lütfen bir proje seçin...</option>
+<select id="companySelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
+    <option value="">Şirket seçin...</option>
 </select>
 
 <h2>Kategori 1 Seçimi</h2>
 
-<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
-    <option value="">Lütfen bir proje seçin...</option>
-</select>
-
-<h2>Kategori 2 Seçimi</h2>
-
-<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
-    <option value="">Lütfen bir proje seçin...</option>
-</select>
-
-<h2>Kategori 3 Seçimi</h2>
-
-<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
-    <option value="">Lütfen bir proje seçin...</option>
-</select>
-
-
-<h2>Kategori 4 Seçimi</h2>
-
-<select id="urunSelect" asp-items="@(new SelectList(Model, "Id", "CoCode"))">
-    <option value="">Lütfen bir proje seçin...</option>
+<select id="categorySelect" asp-items="@(new SelectList(Model, "Id", "Description"))">
+    <option value="">Kategori 1 seçin...</option>
 </select>
 
 

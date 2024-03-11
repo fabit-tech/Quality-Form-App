@@ -15,9 +15,9 @@ namespace QuailtyForm.Data
             ConnectionString = connectionString;
         }
 
-        public List<Urun> GetUrunler()
+        public List<Company> GetCompany()
         {
-            List<Urun> urunler = new List<Urun>();
+            List<Company> company = new List<Company>();
 
             using (OracleConnection con = new OracleConnection(ConnectionString))
             {
@@ -28,7 +28,7 @@ namespace QuailtyForm.Data
                 OracleDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    urunler.Add(new Urun
+                    company.Add(new Company
                     {
                         Id = Convert.ToInt32(reader["CO_ID"]),
                         CoCode = reader["CO_CODE"].ToString()
@@ -36,7 +36,203 @@ namespace QuailtyForm.Data
                 }
             }
 
-            return urunler;
+            return company;
         }
+
+        public List<Project> GetProject()
+        {
+            List<Project> project = new List<Project>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                OracleCommand cmd = new OracleCommand("SELECT T.BLOCK_CODE,D.FLOOR_CODE,T.PROJECT_BLOCK_DEF_ID FROM ZZZT_PROJECT_BLOCK_DEF T LEFT JOIN  ZZZT_PROJECT_BLOCK_DEF_D D ON  D.PROJECT_BLOCK_DEF_ID=T.PROJECT_BLOCK_DEF_ID", con);
+                cmd.CommandType = CommandType.Text;
+
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    project.Add(new Project
+                    {
+                        Id = Convert.ToInt32(reader["PROJECT_BLOCK_DEF_ID"]),
+                        FloorCode = reader["FLOOR_CODE"].ToString(),
+                        BlockCode = reader["BLOCK_CODE"].ToString()
+                    });
+                }
+            }
+
+            return project;
+        }
+
+
+        public List<Category1> GetCategory1()
+        {
+            List<Category1> category = new List<Category1>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                OracleCommand cmd = new OracleCommand("SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories where categories_page = 12 AND STEP=2 AND ISPASSIVE = 0", con);
+                cmd.CommandType = CommandType.Text;
+
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    category.Add(new Category1
+                    {
+                        Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
+                        Description = reader["DESCRIPTION"].ToString()
+                    });
+                }
+            }
+
+            return category;
+        }
+
+        public List<Category1> GetCategory2(int parentId)
+        {
+            List<Category1> category = new List<Category1>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                // Parametre olarak eklediğiniz parentId değerini kullanın
+                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=3 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                OracleCommand cmd = new OracleCommand(query, con);
+                cmd.CommandType = CommandType.Text;
+
+                // parentId parametresini sorgunuza ekleyin
+                cmd.Parameters.Add(new OracleParameter("parentId", parentId));
+
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    category.Add(new Category1
+                    {
+                        Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
+                        Description = reader["DESCRIPTION"].ToString()
+                    });
+                }
+            }
+            return category;
+        }
+
+        public List<Category1> GetCategory3(int parentId)
+        {
+            List<Category1> category = new List<Category1>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                // Parametre olarak eklediğiniz parentId değerini kullanın
+                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=4 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                OracleCommand cmd = new OracleCommand(query, con);
+                cmd.CommandType = CommandType.Text;
+
+                // parentId parametresini sorgunuza ekleyin
+                cmd.Parameters.Add(new OracleParameter("parentId", parentId));
+
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    category.Add(new Category1
+                    {
+                        Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
+                        Description = reader["DESCRIPTION"].ToString()
+                    });
+                }
+            }
+            return category;
+        }
+
+        public List<Category1> GetCategory4()
+        {
+            List<Category1> category = new List<Category1>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                // Parametre olarak eklediğiniz parentId değerini kullanın
+                //string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=5 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=5 AND ISPASSIVE = 0";
+                OracleCommand cmd = new OracleCommand(query, con);
+                cmd.CommandType = CommandType.Text;
+
+                // parentId parametresini sorgunuza ekleyin
+                //cmd.Parameters.Add(new OracleParameter("parentId", parentId));
+
+                OracleDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    category.Add(new Category1
+                    {
+                        Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
+                        Description = reader["DESCRIPTION"].ToString()
+                    });
+                }
+            }
+            return category;
+        }
+
+
+        public List<Question> GetQuestion(int category1Id, int category2Id, int category3Id)
+        {
+            List<Question> questions = new List<Question>();
+
+            using (OracleConnection con = new OracleConnection(ConnectionString))
+            {
+                con.Open();
+                string query = "SELECT CSQ.SURVEY_QUESTION_ID,QUESTION,ZZ_CATEGORIES_ID,ZZ_CATEGORIES_ID2,ZZ_CATEGORIES_ID3 FROM CRMD_SURVEY CS LEFT JOIN CRMD_SURVEY_QUESTION    CSQ  ON  CS.SURVEY_ID=CSQ.SURVEY_ID LEFT JOIN CRMD_SURVEY_QUESTION_D  CSQD    ON   CSQD.SURVEY_QUESTION_ID=CSQ.SURVEY_QUESTION_ID where ZZ_CATEGORIES_ID = :category1Id AND ZZ_CATEGORIES_ID2 = :category2Id AND ZZ_CATEGORIES_ID3 = :category3Id";
+                OracleCommand cmd = new OracleCommand(query, con);
+                cmd.Parameters.Add(new OracleParameter("category1Id", category1Id));
+                cmd.Parameters.Add(new OracleParameter("category2Id", category2Id));
+                cmd.Parameters.Add(new OracleParameter("category3Id", category3Id));
+
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        questions.Add(new Question
+                        {
+                            Id = Convert.ToInt32(reader["SURVEY_QUESTION_ID"]),
+                            Question_Text = reader["QUESTION"].ToString(),
+                            Categori1Id = Convert.ToInt32(reader["ZZ_CATEGORIES_ID"]),
+                            Categori2Id = Convert.ToInt32(reader["ZZ_CATEGORIES_ID2"]),
+                            Categori3Id = Convert.ToInt32(reader["ZZ_CATEGORIES_ID3"])
+                        });
+                    }
+                }
+            }
+            return questions;
+        }
+
+
+
+
+
+        //public List<Category1> GetCategory2()
+        //{
+        //    List<Category1> category = new List<Category1>();
+
+        //    using (OracleConnection con = new OracleConnection(ConnectionString))
+        //    {
+        //        con.Open();
+        //        OracleCommand cmd = new OracleCommand("SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories where categories_page = 12 AND STEP=3 AND ISPASSIVE = 0 AND PARENT_CAT_ID = {0}", con);
+        //        cmd.CommandType = CommandType.Text;
+
+        //        OracleDataReader reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            category.Add(new Category1
+        //            {
+        //                Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
+        //                Description = reader["DESCRIPTION"].ToString()
+        //            });
+        //        }
+        //    }
+
+        //    return category;
+        //}
+
     }
 }
