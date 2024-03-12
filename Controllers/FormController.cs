@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
+using OracleInternal.SqlAndPlsqlParser.LocalParsing;
 using QuailtyForm.Data;
 using QuailtyForm.Models;
 using QuailtyForm.ViewModels;
@@ -103,7 +104,30 @@ namespace QuailtyForm.Controllers
 
 
 
+        //[HttpPost]
+        //public IActionResult AnketiKaydet(AnswerViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Veritabanına kaydetme işlemleri
+        //        foreach (var cevap in model.Yanitlar)
+        //        {
+        //            // Veritabanına kaydetme işlemi
+        //            // Örnek:
+        //            // INSERT INTO TabloAdi (SoruId, Cevap) VALUES (cevap.SoruId, cevap.Cevap)
+                    
+        //        }
 
+        //        // Başka işlemler...
+        //    }
+        //    return RedirectToAction("Basarili");
+        //}
+
+        //// GET: Anket/Basarili
+        //public IActionResult Basarili()
+        //{
+        //    return View(); // Başarılı işlem sonrası görüntülenecek view
+        //}
 
 
 
