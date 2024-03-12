@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         //public string? Adi { get; set; }
-        public string? CoCode { get; set; }
+        //public string? CoCode { get; set; }
+        public string? ControlName { get; set; }
     }
     public class Category1
     {
@@ -16,7 +17,7 @@
         public int Id { get; set; } // project_block_def_id
         public string? FloorCode { get; set; }
         public string? BlockCode { get; set; }
-        public string DisplayText => $"{FloorCode} - {BlockCode}";
+        public string DisplayText => $"{BlockCode} - {FloorCode}";
 
     }
     public class Question

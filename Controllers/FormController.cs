@@ -64,7 +64,6 @@ namespace QuailtyForm.Controllers
                 Categories2 = category2List,
                 Categories3 = category3List
                 //Categories4 = category4List
-                // Diğer ViewModel özelliklerini buraya ekleyebilirsiniz
             };
 
             return View(viewModel); // ViewModel'i View'a gönder
@@ -76,10 +75,8 @@ namespace QuailtyForm.Controllers
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
-            // GetCategory2 metodunu kullanarak Category2 verilerini alın
             var category2Data = da.GetCategory2(parentId);
 
-            // JSON olarak döndür
             return Json(category2Data);
         }
 
@@ -100,9 +97,7 @@ namespace QuailtyForm.Controllers
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
             var questions3Data = da.GetQuestion(category1Id, category2Id, category3Id);
-            return Json(questions3Data); // AJAX için
-                                    // veya
-                                    // return View(questions); // Eğer bir view'da göstermek istiyorsanız
+            return Json(questions3Data); 
         }
 
 

@@ -22,7 +22,8 @@ namespace QuailtyForm.Data
             using (OracleConnection con = new OracleConnection(ConnectionString))
             {
                 con.Open();
-                OracleCommand cmd = new OracleCommand("SELECT CO_ID,CO_CODE FROM GNLD_COMPANY", con);
+                //OracleCommand cmd = new OracleCommand("SELECT CO_ID,CO_CODE FROM GNLD_COMPANY", con);
+                OracleCommand cmd = new OracleCommand("SELECT QUALITY_CONTROL_DEF_ID,QUALITY_CONTROL_NAME FROM ZZZT_QUALITY_CONTROL_DEF", con);
                 cmd.CommandType = CommandType.Text;
 
                 OracleDataReader reader = cmd.ExecuteReader();
@@ -30,8 +31,8 @@ namespace QuailtyForm.Data
                 {
                     company.Add(new Company
                     {
-                        Id = Convert.ToInt32(reader["CO_ID"]),
-                        CoCode = reader["CO_CODE"].ToString()
+                        Id = Convert.ToInt32(reader["QUALITY_CONTROL_DEF_ID"]),
+                        ControlName = reader["QUALITY_CONTROL_NAME"].ToString()
                     });
                 }
             }
@@ -72,7 +73,7 @@ namespace QuailtyForm.Data
             using (OracleConnection con = new OracleConnection(ConnectionString))
             {
                 con.Open();
-                OracleCommand cmd = new OracleCommand("SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories where categories_page = 12 AND STEP=2 AND ISPASSIVE = 0", con);
+                OracleCommand cmd = new OracleCommand("SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories where categories_page = 12 and STEP=2 ", con);
                 cmd.CommandType = CommandType.Text;
 
                 OracleDataReader reader = cmd.ExecuteReader();
@@ -97,7 +98,7 @@ namespace QuailtyForm.Data
             {
                 con.Open();
                 // Parametre olarak eklediğiniz parentId değerini kullanın
-                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=3 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=3 AND (PARENT_CAT_ID = :parentId or nvl(parent_cat_id,0) = 0)";
                 OracleCommand cmd = new OracleCommand(query, con);
                 cmd.CommandType = CommandType.Text;
 
@@ -125,7 +126,7 @@ namespace QuailtyForm.Data
             {
                 con.Open();
                 // Parametre olarak eklediğiniz parentId değerini kullanın
-                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=4 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=4 AND (PARENT_CAT_ID = :parentId or nvl(parent_cat_id,0) = 0)";
                 OracleCommand cmd = new OracleCommand(query, con);
                 cmd.CommandType = CommandType.Text;
 
@@ -153,7 +154,7 @@ namespace QuailtyForm.Data
             {
                 con.Open();
                 // Parametre olarak eklediğiniz parentId değerini kullanın
-                //string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=5 AND ISPASSIVE = 0 AND PARENT_CAT_ID = :parentId";
+                //string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=5 AND (PARENT_CAT_ID = :parentId or nvl(parent_cat_id,0) = 0)";
                 string query = "SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories WHERE categories_page = 12 AND STEP=5 AND ISPASSIVE = 0";
                 OracleCommand cmd = new OracleCommand(query, con);
                 cmd.CommandType = CommandType.Text;
