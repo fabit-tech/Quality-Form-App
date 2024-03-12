@@ -75,9 +75,16 @@
             button:hover {
                 background-color: #45a049;
             }
-        /* New styles for the inline radio buttons */
+
         .radio-options {
-            display: flex;
+            display: block; /* Changed from flex to block to stack the buttons vertically */
+            margin-top: 10px; /* Adjust as needed to move the buttons down */
+        }
+
+        /* Style for the labels next to radio buttons */
+        .radio-label {
+            font-weight: 300; /* Make font thinner */
+            margin-left: 5px; /* Add a little space between the radio button and the label */
         }
 
         /* New styles for question list */
@@ -98,6 +105,8 @@
 
             .question-list li {
                 margin-bottom: 10px;
+                font-weight:bold;
+                
             }
     </style>
 </head>
@@ -164,30 +173,45 @@
     </form>
 </body>
 
-<script>
+@* <script>
     // Function to create radio buttons
     function createRadioButtons(name) {
+     
+       
         const div = document.createElement('div');
         div.className = 'radio-options';
 
+        // Create 'Kabul' radio button and label
         const accept = document.createElement('input');
         accept.type = 'radio';
+        accept.id = name + '-accept'; // Unique ID for the label 'for' attribute
         accept.name = name;
         accept.value = 'accept';
-
         div.appendChild(accept);
-        div.appendChild(document.createTextNode('Kabul'));
 
+        const acceptLabel = document.createElement('label');
+        acceptLabel.setAttribute('for', name + '-accept');
+        acceptLabel.className = 'radio-label';
+        acceptLabel.textContent = 'Kabul';
+        div.appendChild(acceptLabel);
+
+        // Create 'Red' radio button and label
         const reject = document.createElement('input');
-        reject.style.marginLeft = '10px'; // Add margin to the right of the radio button
-
         reject.type = 'radio';
+        reject.id = name + '-reject'; // Unique ID for the label 'for' attribute
         reject.name = name;
         reject.value = 'reject';
+        reject.style.marginLeft = '10px';
         div.appendChild(reject);
-        div.appendChild(document.createTextNode('Red'));
+
+        const rejectLabel = document.createElement('label');
+        rejectLabel.setAttribute('for', name + '-reject');
+        rejectLabel.className = 'radio-label';
+        rejectLabel.textContent = 'Red';
+        div.appendChild(rejectLabel);
 
         return div;
+      
     }
 
     // Handling the listing of questions
@@ -216,7 +240,7 @@
         // Add your form submission logic here
         alert('Anket Kaydedildi');
     }
-</script>
+</script> *@
 
 
 
@@ -296,15 +320,18 @@
                     $.each(questions, function (index, question) {
                         var li = $('<li>');
                         li.append(document.createTextNode(question.question_Text));
-
+                        li.append($('<br>'));
                         // Radyo butonları ekle
                         var radioAccept = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'accept' });
-                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject' });
+                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject' , css: { marginLeft: '10px' } });
+                      
 
                         li.append(radioAccept);
-                        li.append($('<label>').text('Kabul'));
+                        
+                        li.append($('<label>').text('Kabul').css('color', 'green'));
+                        
                         li.append(radioReject);
-                        li.append($('<label>').text('Red'));
+                        li.append($('<label>').text('Red').css('color','red'));
 
                         list.append(li);
                     });
