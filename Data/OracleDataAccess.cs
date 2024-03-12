@@ -3,6 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using QuailtyForm.ViewModels;
 
 namespace QuailtyForm.Data
 {
@@ -32,7 +33,8 @@ namespace QuailtyForm.Data
                     company.Add(new Company
                     {
                         Id = Convert.ToInt32(reader["QUALITY_CONTROL_DEF_ID"]),
-                        ControlName = reader["QUALITY_CONTROL_NAME"].ToString()
+                        ControlName = reader["QUALITY_CONTROL_NAME"].ToString(),
+                        SurveyId = Convert.ToInt32(reader["SURVEY_ID"]),
                     });
                 }
             }
@@ -206,6 +208,43 @@ namespace QuailtyForm.Data
             }
             return questions;
         }
+
+
+        //public void AnketCevaplariniKaydet(AnswerViewModel model)
+        //{
+        //    using (OracleConnection con = new OracleConnection(ConnectionString))
+        //    {
+        //        con.Open();
+
+        //        foreach (var cevap in model.Yanitlar)
+        //        {
+        //            string query = "INSERT INTO ZZZT_QUALITY_CONTROL_DEF (QUESTION_ID,SURVEY_ID,FLOOR_ID,DESCRIPTION) VALUES (:SoruId, :SurveyId, :FloorId, :Description)";
+        //            OracleCommand cmd = new OracleCommand(query, con);
+        //            cmd.Parameters.Add(new OracleParameter("SoruId", cevap.SoruId));
+        //            cmd.Parameters.Add(new OracleParameter("Cevap", cevap.Yanit));
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

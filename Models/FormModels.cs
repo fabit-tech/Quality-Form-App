@@ -6,6 +6,7 @@
         //public string? Adi { get; set; }
         //public string? CoCode { get; set; }
         public string? ControlName { get; set; }
+        public int SurveyId { get; set; }
     }
     public class Category1
     {

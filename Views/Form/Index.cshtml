@@ -118,7 +118,7 @@
             <div class="col-12">
                 <div>
                     <h3>Kalite Kontrol</h3>
-                    <select id="companySelect" asp-items="@(new SelectList(Model.Companies, "Id", "ControlName"))">
+                    <select id="companySelect" asp-items="@(new SelectList(Model.Companies, "Id", "ControlName","SurveyId"))">
                         <option value="">Kalite Kontrol seçin...</option>
                     </select>
                 </div>
