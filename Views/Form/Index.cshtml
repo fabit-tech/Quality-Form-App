@@ -247,54 +247,8 @@
 
 
 
-@* <table id="questionsTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Soru Metni</th>
-            <!-- Diğer sütun başlıkları -->
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Buraya AJAX ile veriler eklenecek -->
-    </tbody>
-</table> *@
 
 
-@* <script>
-    $(document).ready(function () {
-        $('#listeleButton').click(function () {
-            var category1Id = $('#category1Select').val();
-            var category2Id = $('#category2Select').val();
-            var category3Id = $('#category3Select').val();
-
-            $.ajax({
-                url: '@Url.Action("GetQuestionData", "Form")',
-                type: 'GET',
-                data: {
-                    category1Id: category1Id,
-                    category2Id: category2Id,
-                    category3Id: category3Id
-                },
-                success: function (data) {
-                    var tableBody = $('#questionsTable tbody');
-                    tableBody.empty(); // Mevcut içeriği temizle
-
-                    $.each(data, function (index, item) {
-                        var row = $('<tr>');
-                        row.append($('<td>').text(item.id));
-                        row.append($('<td>').text(item.question_Text));
-                        // Diğer alanlar için benzer eklemeler yapabilirsiniz
-                        tableBody.append(row);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error("Hata:", error);
-                }
-            });
-        });
-    });
-</script> *@
 
 <script>
     $(document).ready(function () {
@@ -395,31 +349,55 @@
                 }
             });
         });
-
-        // Category3 değişikliğinde Category4'ü güncelle
-        // $('#category3Select').change(function () {
-        //     var selectedCategoryId = $(this).val();
-
-        //     $.ajax({
-        //         url: '@Url.Action("GetCategory4Data", "Form")',
-        //         type: 'GET',
-        //         data: { parentId: selectedCategoryId },
-        //         success: function (data) {
-        //             var category4Select = $('#category4Select');
-        //             category4Select.empty();
-        //             category4Select.append($('<option>', { value: '', text: 'Kategori 4 seçin...' }));
-
-        //             $.each(data, function (index, item) {
-        //                 category3Select.append($('<option>', {
-        //                     value: item.id,
-        //                     text: item.description
-        //                 }));
-        //             });
-        //         }
-        //     });
-        // });
     });
+
+
+
 </script>
+<script>
+    function submitForm() {
+        // Gather form data
+        var formData = {
+            companySelect: $('#companySelect').val(),
+            projectSelect: $('#projectSelect').val(),
+            category1Select: $('#category1Select').val(),
+            category2Select: $('#category2Select').val(),
+            category3Select: $('#category3Select').val(),
+            categorySelect: $('#categorySelect').val(),
+            questions: []  // Array to hold questions and their answers
+        };
+
+        $('#questionItems li').each(function () {
+            var question = $(this).text();
+            var selectedRadio = $(this).find('input[type="radio"]:checked');
+            var answer = selectedRadio.length > 0 ? selectedRadio.val() : null;
+
+            formData.questions.push({
+                question: question,
+                answer: answer
+            });
+        });
+        console.log(JSON.stringify(formData));
+        // AJAX POST request
+        $.ajax({
+            url: '@Url.Action("SubmitSurvey", "Form")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                // Success logic here
+                alert('Anket başarıyla kaydedildi.');
+            },
+            error: function (error) {
+                // Error handling here
+                alert('Bir hata oluştu. Anket kaydedilemedi.');
+            }
+        });
+    }
+
+
+</script>
+
 
 
 

@@ -104,30 +104,34 @@ namespace QuailtyForm.Controllers
 
 
 
-        //[HttpPost]
-        //public IActionResult AnketiKaydet(AnswerViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Veritabanına kaydetme işlemleri
-        //        foreach (var cevap in model.Yanitlar)
-        //        {
-        //            // Veritabanına kaydetme işlemi
-        //            // Örnek:
-        //            // INSERT INTO TabloAdi (SoruId, Cevap) VALUES (cevap.SoruId, cevap.Cevap)
-                    
-        //        }
+        [HttpPost]
+        public JsonResult SubmitSurvey(SurveyModel surveyData)
+        {
+            var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+            OracleDataAccess da = new OracleDataAccess(connectionString);
+            // Process the survey data here
+            // You might save it to a database or handle it according to your application's logic
 
-        //        // Başka işlemler...
-        //    }
-        //    return RedirectToAction("Basarili");
-        //}
+            // Dummy implementation - just logging to console for demonstration
+            System.Diagnostics.Debug.WriteLine("Survey Data Received:");
+            System.Diagnostics.Debug.WriteLine($"Company Select: {surveyData.CompanySelect}");
+            System.Diagnostics.Debug.WriteLine($"Project Select: {surveyData.ProjectSelect}");
+            // Include other properties as needed
 
-        //// GET: Anket/Basarili
-        //public IActionResult Basarili()
-        //{
-        //    return View(); // Başarılı işlem sonrası görüntülenecek view
-        //}
+            foreach (var qa in surveyData.Questions)
+            {
+                System.Diagnostics.Debug.WriteLine($"Question: {qa.Question} - Answer: {qa.Answer}");
+            }
+
+            // Return a JSON response indicating success
+            return Json(new { success = true, message = "Anket başarıyla kaydedildi." });
+        }
+
+        // GET: Anket/Basarili
+        public IActionResult Basarili()
+        {
+            return View(); // Başarılı işlem sonrası görüntülenecek view
+        }
 
 
 

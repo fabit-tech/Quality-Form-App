@@ -24,7 +24,7 @@ namespace QuailtyForm.Data
             {
                 con.Open();
                 //OracleCommand cmd = new OracleCommand("SELECT CO_ID,CO_CODE FROM GNLD_COMPANY", con);
-                OracleCommand cmd = new OracleCommand("SELECT QUALITY_CONTROL_DEF_ID,QUALITY_CONTROL_NAME FROM ZZZT_QUALITY_CONTROL_DEF", con);
+                OracleCommand cmd = new OracleCommand("SELECT QUALITY_CONTROL_DEF_ID,QUALITY_CONTROL_NAME,SURVEY_ID FROM ZZZT_QUALITY_CONTROL_DEF", con);
                 cmd.CommandType = CommandType.Text;
 
                 OracleDataReader reader = cmd.ExecuteReader();
