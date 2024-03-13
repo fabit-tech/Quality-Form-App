@@ -180,8 +180,8 @@
 @* <script>
     // Function to create radio buttons
     function createRadioButtons(name) {
-     
-       
+
+
         const div = document.createElement('div');
         div.className = 'radio-options';
 
@@ -215,7 +215,7 @@
         div.appendChild(rejectLabel);
 
         return div;
-      
+
     }
 
     // Handling the listing of questions
@@ -351,6 +351,30 @@
                 }
             });
         });
+
+        // Kalite Kontrol Forma göre Kat Blok Seçme
+        $('#company1Select').change(function () {
+            var selectedProjectId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetProjectData", "Form")',
+                type: 'GET',
+                data: { projectBlockDef: selectedProjectId },
+                success: function (data) {
+                    var project1Select = $('#project1Select');
+                    project1Select.empty();
+                    project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        project1Select.append($('<option>', {
+                            value: item.id,
+                            text: item.displayText
+                        }));
+                    });
+                }
+            });
+        });
+
     });
 
 
@@ -369,20 +393,20 @@
             questions: []  // Array to hold questions and their answers
         };
 
-            $.ajax({
-                url: '@Url.Action("GetProjectData", "Form")',
-                type: 'GET',
-                data: { projectBlockDef: selectedProjectId },
-                success: function (data) {
-                    var project1Select = $('#project1Select');
-                    project1Select.empty();
-                    project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
+        $.ajax({
+            url: '@Url.Action("GetProjectData", "Form")',
+            type: 'GET',
+            data: { projectBlockDef: selectedProjectId },
+            success: function (data) {
+                var project1Select = $('#project1Select');
+                project1Select.empty();
+                project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
 
-            formData.questions.push({
-                question: question,
-                answer: answer
+                formData.questions.push({
+                    question: question,
+                    answer: answer
+                });
             });
-        });
         console.log(JSON.stringify(formData));
         // AJAX POST request
         $.ajax({

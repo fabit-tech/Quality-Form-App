@@ -56,7 +56,7 @@ namespace QuailtyForm.Controllers
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
             var project1List = da.GetCompany();
-            int selectedprojectBlockDef = project1List.FirstOrDefault()?.Id ?? 0;
+            int selectedprojectBlockDef = project1List.FirstOrDefault()?.ProjectBlockDefId ?? 0;
 
             var category1List = da.GetCategory1();
             int selectedParentId = category1List.FirstOrDefault()?.Id ?? 0;
