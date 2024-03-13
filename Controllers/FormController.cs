@@ -122,7 +122,7 @@ namespace QuailtyForm.Controllers
 
 
         [HttpPost]
-        public JsonResult SubmitSurvey(SurveyModel surveyData)
+        public JsonResult SubmitSurvey([FromBody] SurveyModel surveyData)
         {
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
