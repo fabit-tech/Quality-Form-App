@@ -56,7 +56,7 @@ namespace QuailtyForm.Controllers
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
             var project1List = da.GetCompany();
-            int selectedprojectBlockDef = project1List.FirstOrDefault()?.Id ?? 0;
+            int selectedprojectBlockDef = project1List.FirstOrDefault()?.ProjectBlockDefId ?? 0;
 
             var category1List = da.GetCategory1();
             int selectedParentId = category1List.FirstOrDefault()?.Id ?? 0;
@@ -108,7 +108,6 @@ namespace QuailtyForm.Controllers
             var questions3Data = da.GetQuestion(category1Id, category2Id, category3Id);
             return Json(questions3Data); 
         }
-
 
         [HttpGet]
         public IActionResult GetProjectData(int projectBlockDef)

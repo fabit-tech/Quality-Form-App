@@ -24,6 +24,7 @@ namespace QuailtyForm.Data
             {
                 con.Open();
                 //OracleCommand cmd = new OracleCommand("SELECT CO_ID,CO_CODE FROM GNLD_COMPANY", con);
+                //OracleCommand cmd = new OracleCommand("SELECT QUALITY_CONTROL_DEF_ID,QUALITY_CONTROL_NAME,SURVEY_ID FROM ZZZT_QUALITY_CONTROL_DEF", con);
                 OracleCommand cmd = new OracleCommand("SELECT QC.QUALITY_CONTROL_DEF_ID,QC.QUALITY_CONTROL_NAME,QC.SURVEY_ID,QCD.PROJECT_BLOCK_DEF_ID FROM ZZZT_QUALITY_CONTROL_DEF QC LEFT JOIN ZZZT_QUALITY_CONTROL_DEF_D  QCD ON QC.QUALITY_CONTROL_DEF_ID = QCD.QUALITY_CONTROL_DEF_ID", con);
                 cmd.CommandType = CommandType.Text;
 
@@ -50,7 +51,7 @@ namespace QuailtyForm.Data
             using (OracleConnection con = new OracleConnection(ConnectionString))
             {
                 con.Open();
-                OracleCommand cmd = new OracleCommand("SELECT T.BLOCK_CODE,D.FLOOR_CODE,T.PROJECT_BLOCK_DEF_ID FROM ZZZT_PROJECT_BLOCK_DEF T LEFT JOIN  ZZZT_PROJECT_BLOCK_DEF_D D ON  D.PROJECT_BLOCK_DEF_ID=T.PROJECT_BLOCK_DEF_ID where T.PROJECT_BLOCK_DEF_ID = :projectBlockDefId", con);
+                OracleCommand cmd = new OracleCommand("SELECT T.BLOCK_CODE,D.FLOOR_CODE,T.PROJECT_BLOCK_DEF_ID,D.PROJECT_BLOCK_DEF_D_ID FROM ZZZT_PROJECT_BLOCK_DEF T LEFT JOIN  ZZZT_PROJECT_BLOCK_DEF_D D ON  D.PROJECT_BLOCK_DEF_ID=T.PROJECT_BLOCK_DEF_ID where T.PROJECT_BLOCK_DEF_ID = :projectBlockDefId", con);
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new OracleParameter("projectBlockDefId", projectBlockDef));
 
@@ -60,6 +61,7 @@ namespace QuailtyForm.Data
                     project.Add(new Project
                     {
                         Id = Convert.ToInt32(reader["PROJECT_BLOCK_DEF_ID"]),
+                        BlockDefDId = Convert.ToInt32(reader["PROJECT_BLOCK_DEF_D_ID"]),
                         FloorCode = reader["FLOOR_CODE"].ToString(),
                         BlockCode = reader["BLOCK_CODE"].ToString()
                     });
@@ -210,71 +212,5 @@ namespace QuailtyForm.Data
             }
             return questions;
         }
-
-
-        //public void AnketCevaplariniKaydet(AnswerViewModel model)
-        //{
-        //    using (OracleConnection con = new OracleConnection(ConnectionString))
-        //    {
-        //        con.Open();
-
-        //        foreach (var cevap in model.Yanitlar)
-        //        {
-        //            string query = "INSERT INTO ZZZT_QUALITY_CONTROL_DEF (QUESTION_ID,SURVEY_ID,FLOOR_ID,DESCRIPTION) VALUES (:SoruId, :SurveyId, :FloorId, :Description)";
-        //            OracleCommand cmd = new OracleCommand(query, con);
-        //            cmd.Parameters.Add(new OracleParameter("SoruId", cevap.SoruId));
-        //            cmd.Parameters.Add(new OracleParameter("Cevap", cevap.Yanit));
-        //            cmd.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public List<Category1> GetCategory2()
-        //{
-        //    List<Category1> category = new List<Category1>();
-
-        //    using (OracleConnection con = new OracleConnection(ConnectionString))
-        //    {
-        //        con.Open();
-        //        OracleCommand cmd = new OracleCommand("SELECT CATEGORIES_ID, DESCRIPTION FROM gnld_categories where categories_page = 12 AND STEP=3 AND ISPASSIVE = 0 AND PARENT_CAT_ID = {0}", con);
-        //        cmd.CommandType = CommandType.Text;
-
-        //        OracleDataReader reader = cmd.ExecuteReader();
-        //        while (reader.Read())
-        //        {
-        //            category.Add(new Category1
-        //            {
-        //                Id = Convert.ToInt32(reader["CATEGORIES_ID"]),
-        //                Description = reader["DESCRIPTION"].ToString()
-        //            });
-        //        }
-        //    }
-
-        //    return category;
-        //}
-
     }
 }

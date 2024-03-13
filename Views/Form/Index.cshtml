@@ -105,14 +105,13 @@
 
             .question-list li {
                 margin-bottom: 10px;
-                font-weight:bold;
-                
+                font-weight: bold;
             }
-            h1,h3{
-                font-weight:bold;
-                color:black;
-            }
-            
+
+        h1, h3 {
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
 
@@ -207,15 +206,15 @@
                         li.append($('<br>'));
                         // Radyo butonları ekle
                         var radioAccept = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'accept' });
-                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject' , css: { marginLeft: '10px' } });
-                      
+                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject', css: { marginLeft: '10px' } });
+
 
                         li.append(radioAccept);
-                        
+
                         li.append($('<label>').text('Kabul').css('color', 'green'));
-                        
+
                         li.append(radioReject);
-                        li.append($('<label>').text('Red').css('color','red'));
+                        li.append($('<label>').text('Red').css('color', 'red'));
 
                         list.append(li);
                     });
@@ -229,8 +228,6 @@
         });
     });
 </script>
-
-
 
 <script>
     $(document).ready(function () {
@@ -279,6 +276,30 @@
                 }
             });
         });
+
+        // Kalite Kontrol Forma göre Kat Blok Seçme
+        $('#company1Select').change(function () {
+            var selectedProjectId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetProjectData", "Form")',
+                type: 'GET',
+                data: { projectBlockDef: selectedProjectId },
+                success: function (data) {
+                    var project1Select = $('#project1Select');
+                    project1Select.empty();
+                    project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        project1Select.append($('<option>', {
+                            value: item.id,
+                            text: item.displayText
+                        }));
+                    });
+                }
+            });
+        });
+
     });
 
 
@@ -302,7 +323,20 @@
         
         };
 
-        });
+        $.ajax({
+            url: '@Url.Action("GetProjectData", "Form")',
+            type: 'GET',
+            data: { projectBlockDef: selectedProjectId },
+            success: function (data) {
+                var project1Select = $('#project1Select');
+                project1Select.empty();
+                project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
+
+                formData.questions.push({
+                    question: question,
+                    answer: answer
+                });
+            });
         console.log(JSON.stringify(formData));
         // AJAX POST request
         $.ajax({

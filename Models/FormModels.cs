@@ -17,6 +17,7 @@
     public class Project
     {
         public int Id { get; set; } // project_block_def_id
+        public int BlockDefDId { get; set; } // project_block_def_d_id
         public string? FloorCode { get; set; }
         public string? BlockCode { get; set; }
         public string DisplayText => $"{BlockCode} - {FloorCode}";
