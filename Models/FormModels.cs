@@ -7,6 +7,7 @@
         //public string? CoCode { get; set; }
         public string? ControlName { get; set; }
         public int SurveyId { get; set; }
+        public int ProjectBlockDefId { get; set; }
     }
     public class Category1
     {
