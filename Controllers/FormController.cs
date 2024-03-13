@@ -109,7 +109,6 @@ namespace QuailtyForm.Controllers
             return Json(questions3Data); 
         }
 
-
         [HttpGet]
         public IActionResult GetProjectData(int projectBlockDef)
         {
@@ -119,92 +118,5 @@ namespace QuailtyForm.Controllers
             var project1Data = da.GetProject(projectBlockDef);
             return Json(project1Data);
         }
-
-
-        //[HttpPost]
-        //public IActionResult AnketiKaydet(AnswerViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Veritabanına kaydetme işlemleri
-        //        foreach (var cevap in model.Yanitlar)
-        //        {
-        //            // Veritabanına kaydetme işlemi
-        //            // Örnek:
-        //            // INSERT INTO TabloAdi (SoruId, Cevap) VALUES (cevap.SoruId, cevap.Cevap)
-
-        //        }
-
-        //        // Başka işlemler...
-        //    }
-        //    return RedirectToAction("Basarili");
-        //}
-
-        //// GET: Anket/Basarili
-        //public IActionResult Basarili()
-        //{
-        //    return View(); // Başarılı işlem sonrası görüntülenecek view
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //[HttpGet]
-        //public IActionResult GetCategory4Data(int parentId)
-        //{
-        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
-        //    OracleDataAccess da = new OracleDataAccess(connectionString);
-
-        //    var category4Data = da.GetCategory4(parentId);
-        //    return Json(category4Data);
-        //}
-        //public IActionResult Company()
-        //{
-        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
-        //    OracleDataAccess da = new OracleDataAccess(connectionString);
-        //    var company = da.GetCompany();
-
-        //    return View(company);
-        //}
-
-        //public IActionResult Category1()
-        //{
-        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
-        //    OracleDataAccess da = new OracleDataAccess(connectionString);
-        //    var category1 = da.GetCategory1();
-
-        //    return View(category1);
-        //}
-
     }
 }

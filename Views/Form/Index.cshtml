@@ -105,14 +105,13 @@
 
             .question-list li {
                 margin-bottom: 10px;
-                font-weight:bold;
-                
+                font-weight: bold;
             }
-            h1,h3{
-                font-weight:bold;
-                color:black;
-            }
-            
+
+        h1, h3 {
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
 
@@ -178,129 +177,6 @@
     </form>
 </body>
 
-@* <script>
-    // Function to create radio buttons
-    function createRadioButtons(name) {
-     
-       
-        const div = document.createElement('div');
-        div.className = 'radio-options';
-
-        // Create 'Kabul' radio button and label
-        const accept = document.createElement('input');
-        accept.type = 'radio';
-        accept.id = name + '-accept'; // Unique ID for the label 'for' attribute
-        accept.name = name;
-        accept.value = 'accept';
-        div.appendChild(accept);
-
-        const acceptLabel = document.createElement('label');
-        acceptLabel.setAttribute('for', name + '-accept');
-        acceptLabel.className = 'radio-label';
-        acceptLabel.textContent = 'Kabul';
-        div.appendChild(acceptLabel);
-
-        // Create 'Red' radio button and label
-        const reject = document.createElement('input');
-        reject.type = 'radio';
-        reject.id = name + '-reject'; // Unique ID for the label 'for' attribute
-        reject.name = name;
-        reject.value = 'reject';
-        reject.style.marginLeft = '10px';
-        div.appendChild(reject);
-
-        const rejectLabel = document.createElement('label');
-        rejectLabel.setAttribute('for', name + '-reject');
-        rejectLabel.className = 'radio-label';
-        rejectLabel.textContent = 'Red';
-        div.appendChild(rejectLabel);
-
-        return div;
-      
-    }
-
-    // Handling the listing of questions
-    document.querySelector('.bg-primary').addEventListener('click', function () {
-        var selectElements = document.querySelectorAll('select');
-        var list = document.getElementById('questionItems');
-        list.innerHTML = ''; // Clear existing list items
-        selectElements.forEach(function (select, index) {
-            var optionText = select.options[select.selectedIndex].text;
-            if (optionText) {
-                var li = document.createElement('li');
-                li.textContent = optionText;
-                li.style.fontFamily.bold;
-                // Append radio buttons to each list item
-                var radios = createRadioButtons('option' + index);
-                li.appendChild(radios);
-
-                list.appendChild(li);
-            }
-        });
-        document.getElementById('questionList').style.display = 'flex'; // Show question list
-    });
-
-    // Function to handle form submission
-    function submitForm() {
-        // Add your form submission logic here
-        alert('Anket Kaydedildi');
-    }
-</script> *@
-
-
-
-
-
-
-@* <table id="questionsTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Soru Metni</th>
-            <!-- Diğer sütun başlıkları -->
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Buraya AJAX ile veriler eklenecek -->
-    </tbody>
-</table> *@
-
-
-@* <script>
-    $(document).ready(function () {
-        $('#listeleButton').click(function () {
-            var category1Id = $('#category1Select').val();
-            var category2Id = $('#category2Select').val();
-            var category3Id = $('#category3Select').val();
-
-            $.ajax({
-                url: '@Url.Action("GetQuestionData", "Form")',
-                type: 'GET',
-                data: {
-                    category1Id: category1Id,
-                    category2Id: category2Id,
-                    category3Id: category3Id
-                },
-                success: function (data) {
-                    var tableBody = $('#questionsTable tbody');
-                    tableBody.empty(); // Mevcut içeriği temizle
-
-                    $.each(data, function (index, item) {
-                        var row = $('<tr>');
-                        row.append($('<td>').text(item.id));
-                        row.append($('<td>').text(item.question_Text));
-                        // Diğer alanlar için benzer eklemeler yapabilirsiniz
-                        tableBody.append(row);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error("Hata:", error);
-                }
-            });
-        });
-    });
-</script> *@
-
 <script>
     $(document).ready(function () {
         $('#listeleButton').click(function () {
@@ -328,15 +204,15 @@
                         li.append($('<br>'));
                         // Radyo butonları ekle
                         var radioAccept = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'accept' });
-                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject' , css: { marginLeft: '10px' } });
-                      
+                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject', css: { marginLeft: '10px' } });
+
 
                         li.append(radioAccept);
-                        
+
                         li.append($('<label>').text('Kabul').css('color', 'green'));
-                        
+
                         li.append(radioReject);
-                        li.append($('<label>').text('Red').css('color','red'));
+                        li.append($('<label>').text('Red').css('color', 'red'));
 
                         list.append(li);
                     });
@@ -350,8 +226,6 @@
         });
     });
 </script>
-
-
 
 <script>
     $(document).ready(function () {
@@ -410,7 +284,6 @@
                 type: 'GET',
                 data: { projectBlockDef: selectedProjectId },
                 success: function (data) {
-                    console.log(data);
                     var project1Select = $('#project1Select');
                     project1Select.empty();
                     project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
