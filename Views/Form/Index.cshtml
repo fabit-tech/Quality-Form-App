@@ -122,13 +122,13 @@
             <div class="col-12">
                 <div>
                     <h3>Kalite Kontrol</h3>
-                    <select id="company1Select" asp-items="@(new SelectList(Model.Companies, "ProjectBlockDefId", "ControlName","SurveyId"))">
+                    <select id="company1Select" asp-items="@(new SelectList(Model.Companies,"ProjectBlockDefId",  "ControlName","SurveyId"))">
                         <option value="">Kalite Kontrol seçin...</option>
                     </select>
                 </div>
                 <div>
                     <h3>Blok - Kat</h3>
-                    <select id="project1Select" asp-items="@(new SelectList(Model.Projects, "Id","DisplayText"))">
+                    <select id="project1Select" asp-items="@(new SelectList(Model.Projects, "BlockDefDId","DisplayText"))">
                         <option value="">Önce Kalite Kontrol Seçin...</option>
                     </select>
                 </div>
@@ -181,52 +181,52 @@
 
 <script>
     $(document).ready(function () {
-        $('#listeleButton').click(function () {
-            var category1Id = $('#category1Select').val();
-            var category2Id = $('#category2Select').val();
-            var category3Id = $('#category3Select').val();
+                $('#listeleButton').click(function () {
+                    var category1Id = $('#category1Select').val();
+                    var category2Id = $('#category2Select').val();
+                    var category3Id = $('#category3Select').val();
 
-            $.ajax({
-                url: '@Url.Action("GetQuestionData", "Form")',
-                type: 'GET',
-                data: {
-                    category1Id: category1Id,
-                    category2Id: category2Id,
-                    category3Id: category3Id
-                },
-                success: function (questions) {
-                    console.log(questions); // Gelen veriyi konsolda inceleyin
+                    $.ajax({
+                        url: '@Url.Action("GetQuestionData", "Form")',
+                        type: 'GET',
+                        data: {
+                            category1Id: category1Id,
+                            category2Id: category2Id,
+                            category3Id: category3Id
+                        },
+                        success: function (questions) {
+                            console.log(questions); // Gelen veriyi konsolda inceleyin
 
-                    var list = $('#questionList ul');
-                    list.empty(); // Mevcut listeyi temizle
+                            var list = $('#questionList ul');
+                            list.empty(); // Mevcut listeyi temizle
 
-                    $.each(questions, function (index, question) {
-                        var li = $('<li>');
-                        li.append(document.createTextNode(question.question_Text));
-                        li.append($('<br>'));
-                        // Radyo butonları ekle
-                        var radioAccept = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'accept' });
-                        var radioReject = $('<input>', { type: 'radio', name: 'question' + question.id, value: 'reject', css: { marginLeft: '10px' } });
+                            $.each(questions, function (index, question) {
+                                var li = $('<li>');
+                                li.append(document.createTextNode(question.question_Text));
+                                li.append($('<br>'));
+                                // Radyo butonları ekle
+                                var radioAccept = $('<input>', { type: 'radio', name:question.id, value: 'accept' , required: true});
+                                var radioReject = $('<input>', { type: 'radio', name:question.id, value: 'reject', css: { marginLeft: '10px' } });
 
 
-                        li.append(radioAccept);
+                                li.append(radioAccept);
 
-                        li.append($('<label>').text('Kabul').css('color', 'green'));
+                                li.append($('<label>').text('Kabul').css('color', 'green'));
 
-                        li.append(radioReject);
-                        li.append($('<label>').text('Red').css('color', 'red'));
+                                li.append(radioReject);
+                                li.append($('<label>').text('Red').css('color', 'red'));
 
-                        list.append(li);
+                                list.append(li);
+                            });
+
+                            $('#questionList').show(); // Soru listesini göster
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Hata:", error);
+                        }
                     });
-
-                    $('#questionList').show(); // Soru listesini göster
-                },
-                error: function (xhr, status, error) {
-                    console.error("Hata:", error);
-                }
+                });
             });
-        });
-    });
 </script>
 
 <script>
@@ -306,56 +306,61 @@
 
 </script>
 <script>
-    function submitForm() {
-        // Gather form data
-        var formData = {
-            surveyId: $('#company1Select').change(function () {
-                var selectedOption = $(this).find('option:selected');
-                var surveyId = selectedOption.attr('SurveyId');
+        function submitForm() {
+                // get survey id
+            var companies = @Html.Raw(Json.Serialize(Model.Companies));
+            var name = $('#company1Select option:selected').text();
+            var selectedCompany = companies.filter(c => c.controlName == name);
+            console.log(selectedCompany);
+            var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
+            console.log(surveyId);
+                //get floor id
+            var projects = @Html.Raw(Json.Serialize(Model.Projects));
+            var displayText = $('#project1Select option:selected').text();
+            var selectedProject = projects.filter(c => c.displayText == displayText);
+            console.log(selectedProject);
+            var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
+            console.log(floorId);
+            var formData = {
+                surveyId: surveyId,
+                floorId: floorId,
+                  
+                        questions: []  // Array to hold questions and their answers
+            };
 
-                var formData = {
-                    company1Select: $(this).val(),
-                    surveyId: surveyId
-                },
-            projectSelect: $('#projectSelect').val(),
-            category1Select: $('#category1Select').val(),
-         
-        
-        };
+            $('#questionItems li').each(function () {
+                
+                debugger;
+                var selectedRadio = $(this).find('input[type="radio"]:checked');
+                if (selectedRadio.length > 0) {
+                   var questionId1 = selectedRadio.attr('name');
+                    var questionId =Number(questionId1);
+                    var answer = selectedRadio.val();
 
-        $.ajax({
-            url: '@Url.Action("GetProjectData", "Form")',
-            type: 'GET',
-            data: { projectBlockDef: selectedProjectId },
-            success: function (data) {
-                var project1Select = $('#project1Select');
-                project1Select.empty();
-                project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
-
-                formData.questions.push({
-                    question: question,
-                    answer: answer
+                    formData.questions.push({
+                    questionId: questionId,
+                        answer: answer
                 });
-            });
-        console.log(JSON.stringify(formData));
-        // AJAX POST request
-        $.ajax({
-            url: '@Url.Action("SubmitSurvey", "Form")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            success: function (response) {
-                // Success logic here
-                alert('Anket başarıyla kaydedildi.');
-            },
-            error: function (error) {
-                // Error handling here
-                alert('Bir hata oluştu. Anket kaydedilemedi.');
             }
-        });
-    }
-
-
+            });
+            console.log(JSON.stringify(formData));
+            // AJAX POST request
+            $.ajax({
+                url: '@Url.Action("SubmitSurvey", "Form")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    // Success logic here
+                    alert('Anket başarıyla kaydedildi.');
+                },
+                error: function (error) {
+                    // Error handling here
+                    alert('Bir hata oluştu. Anket kaydedilemedi.');
+                }
+            });
+        }
+    
 </script>
 
 

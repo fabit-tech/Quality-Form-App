@@ -125,21 +125,15 @@ namespace QuailtyForm.Controllers
         {
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
-            // Process the survey data here
-            // You might save it to a database or handle it according to your application's logic
+            //try
+            //{
 
-            // Dummy implementation - just logging to console for demonstration
-            System.Diagnostics.Debug.WriteLine("Survey Data Received:");
-            System.Diagnostics.Debug.WriteLine($"Company Select: {surveyData.CompanySelect}");
-            System.Diagnostics.Debug.WriteLine($"Project Select: {surveyData.ProjectSelect}");
-            // Include other properties as needed
+            //}
+            //catch (Exception ex)
+            //{
 
-            foreach (var qa in surveyData.Questions)
-            {
-                System.Diagnostics.Debug.WriteLine($"Question: {qa.Question} - Answer: {qa.Answer}");
-            }
-
-            // Return a JSON response indicating success
+            //    throw ex;
+            //}
             return Json(new { success = true, message = "Anket başarıyla kaydedildi." });
         }
 
