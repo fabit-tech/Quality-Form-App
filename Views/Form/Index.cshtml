@@ -177,6 +177,83 @@
     </form>
 </body>
 
+@* <script>
+    // Function to create radio buttons
+    function createRadioButtons(name) {
+     
+       
+        const div = document.createElement('div');
+        div.className = 'radio-options';
+
+        // Create 'Kabul' radio button and label
+        const accept = document.createElement('input');
+        accept.type = 'radio';
+        accept.id = name + '-accept'; // Unique ID for the label 'for' attribute
+        accept.name = name;
+        accept.value = 'accept';
+        div.appendChild(accept);
+
+        const acceptLabel = document.createElement('label');
+        acceptLabel.setAttribute('for', name + '-accept');
+        acceptLabel.className = 'radio-label';
+        acceptLabel.textContent = 'Kabul';
+        div.appendChild(acceptLabel);
+
+        // Create 'Red' radio button and label
+        const reject = document.createElement('input');
+        reject.type = 'radio';
+        reject.id = name + '-reject'; // Unique ID for the label 'for' attribute
+        reject.name = name;
+        reject.value = 'reject';
+        reject.style.marginLeft = '10px';
+        div.appendChild(reject);
+
+        const rejectLabel = document.createElement('label');
+        rejectLabel.setAttribute('for', name + '-reject');
+        rejectLabel.className = 'radio-label';
+        rejectLabel.textContent = 'Red';
+        div.appendChild(rejectLabel);
+
+        return div;
+      
+    }
+
+    // Handling the listing of questions
+    document.querySelector('.bg-primary').addEventListener('click', function () {
+        var selectElements = document.querySelectorAll('select');
+        var list = document.getElementById('questionItems');
+        list.innerHTML = ''; // Clear existing list items
+        selectElements.forEach(function (select, index) {
+            var optionText = select.options[select.selectedIndex].text;
+            if (optionText) {
+                var li = document.createElement('li');
+                li.textContent = optionText;
+                li.style.fontFamily.bold;
+                // Append radio buttons to each list item
+                var radios = createRadioButtons('option' + index);
+                li.appendChild(radios);
+
+                list.appendChild(li);
+            }
+        });
+        document.getElementById('questionList').style.display = 'flex'; // Show question list
+    });
+
+    // Function to handle form submission
+    function submitForm() {
+        // Add your form submission logic here
+        alert('Anket Kaydedildi');
+    }
+</script> *@
+
+
+
+
+
+
+
+
+
 <script>
     $(document).ready(function () {
         $('#listeleButton').click(function () {
@@ -274,10 +351,23 @@
                 }
             });
         });
+    });
 
-        // Kalite Kontrol Forma Göre Proje Gelmesi
-        $('#company1Select').change(function () {
-            var selectedProjectId = $(this).val();
+
+
+</script>
+<script>
+    function submitForm() {
+        // Gather form data
+        var formData = {
+            companySelect: $('#companySelect').val(),
+            projectSelect: $('#projectSelect').val(),
+            category1Select: $('#category1Select').val(),
+            category2Select: $('#category2Select').val(),
+            category3Select: $('#category3Select').val(),
+            categorySelect: $('#categorySelect').val(),
+            questions: []  // Array to hold questions and their answers
+        };
 
             $.ajax({
                 url: '@Url.Action("GetProjectData", "Form")',
@@ -288,17 +378,32 @@
                     project1Select.empty();
                     project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
 
-                    $.each(data, function (index, item) {
-                        project1Select.append($('<option>', {
-                            value: item.id,
-                            text: item.displayText
-                        }));
-                    });
-                }
+            formData.questions.push({
+                question: question,
+                answer: answer
             });
         });
-    });
+        console.log(JSON.stringify(formData));
+        // AJAX POST request
+        $.ajax({
+            url: '@Url.Action("SubmitSurvey", "Form")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                // Success logic here
+                alert('Anket başarıyla kaydedildi.');
+            },
+            error: function (error) {
+                // Error handling here
+                alert('Bir hata oluştu. Anket kaydedilemedi.');
+            }
+        });
+    }
+
+
 </script>
+
 
 
 

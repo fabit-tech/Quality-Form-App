@@ -118,5 +118,96 @@ namespace QuailtyForm.Controllers
             var project1Data = da.GetProject(projectBlockDef);
             return Json(project1Data);
         }
+
+
+        [HttpPost]
+        public JsonResult SubmitSurvey(SurveyModel surveyData)
+        {
+            var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+            OracleDataAccess da = new OracleDataAccess(connectionString);
+            // Process the survey data here
+            // You might save it to a database or handle it according to your application's logic
+
+            // Dummy implementation - just logging to console for demonstration
+            System.Diagnostics.Debug.WriteLine("Survey Data Received:");
+            System.Diagnostics.Debug.WriteLine($"Company Select: {surveyData.CompanySelect}");
+            System.Diagnostics.Debug.WriteLine($"Project Select: {surveyData.ProjectSelect}");
+            // Include other properties as needed
+
+            foreach (var qa in surveyData.Questions)
+            {
+                System.Diagnostics.Debug.WriteLine($"Question: {qa.Question} - Answer: {qa.Answer}");
+            }
+
+            // Return a JSON response indicating success
+            return Json(new { success = true, message = "Anket başarıyla kaydedildi." });
+        }
+
+        // GET: Anket/Basarili
+        public IActionResult Basarili()
+        {
+            return View(); // Başarılı işlem sonrası görüntülenecek view
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //[HttpGet]
+        //public IActionResult GetCategory4Data(int parentId)
+        //{
+        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+        //    OracleDataAccess da = new OracleDataAccess(connectionString);
+
+        //    var category4Data = da.GetCategory4(parentId);
+        //    return Json(category4Data);
+        //}
+        //public IActionResult Company()
+        //{
+        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+        //    OracleDataAccess da = new OracleDataAccess(connectionString);
+        //    var company = da.GetCompany();
+
+        //    return View(company);
+        //}
+
+        //public IActionResult Category1()
+        //{
+        //    var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+        //    OracleDataAccess da = new OracleDataAccess(connectionString);
+        //    var category1 = da.GetCategory1();
+
+        //    return View(category1);
+        //}
+
     }
 }
