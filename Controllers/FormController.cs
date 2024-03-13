@@ -24,6 +24,10 @@ namespace QuailtyForm.Controllers
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
+            var project1List = da.GetCompany();
+            int selectedprojectBlockDef = project1List.FirstOrDefault()?.ProjectBlockDefId ?? 0;
+
+
             var categories1List = da.GetCategory1();
             int selectedParentId = categories1List.FirstOrDefault()?.Id ?? 0;
 
@@ -36,7 +40,7 @@ namespace QuailtyForm.Controllers
             var viewModel = new ComplexFormViewModel
             {
                 Companies = da.GetCompany(),
-                Projects = da.GetProject(),
+                Projects = da.GetProject(selectedprojectBlockDef),
                 Categories1 = da.GetCategory1(),
                 Categories2 = da.GetCategory2(selectedParentId),
                 Categories3 = da.GetCategory3(selectedParentId2),
@@ -51,6 +55,9 @@ namespace QuailtyForm.Controllers
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
+            var project1List = da.GetCompany();
+            int selectedprojectBlockDef = project1List.FirstOrDefault()?.Id ?? 0;
+
             var category1List = da.GetCategory1();
             int selectedParentId = category1List.FirstOrDefault()?.Id ?? 0;
             var category2List = da.GetCategory2(selectedParentId);
@@ -61,6 +68,7 @@ namespace QuailtyForm.Controllers
 
             var viewModel = new ComplexFormViewModel
             {
+
                 Categories1 = category1List,
                 Categories2 = category2List,
                 Categories3 = category3List
@@ -102,6 +110,15 @@ namespace QuailtyForm.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult GetProjectData(int projectBlockDef)
+        {
+            var connectionString = _configuration.GetConnectionString("OracleDbConnection");
+            OracleDataAccess da = new OracleDataAccess(connectionString);
+
+            var project1Data = da.GetProject(projectBlockDef);
+            return Json(project1Data);
+        }
 
 
         //[HttpPost]
@@ -115,7 +132,7 @@ namespace QuailtyForm.Controllers
         //            // Veritabanına kaydetme işlemi
         //            // Örnek:
         //            // INSERT INTO TabloAdi (SoruId, Cevap) VALUES (cevap.SoruId, cevap.Cevap)
-                    
+
         //        }
 
         //        // Başka işlemler...

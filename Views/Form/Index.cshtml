@@ -99,6 +99,11 @@
             .question-list li {
                 margin-bottom: 10px;
             }
+            h1,h3{
+                font-weight:bold;
+                color:black;
+            }
+            
     </style>
 </head>
 
@@ -109,14 +114,14 @@
             <div class="col-12">
                 <div>
                     <h3>Kalite Kontrol</h3>
-                    <select id="companySelect" asp-items="@(new SelectList(Model.Companies, "Id", "ControlName","SurveyId"))">
+                    <select id="company1Select" asp-items="@(new SelectList(Model.Companies, "ProjectBlockDefId", "ControlName","SurveyId"))">
                         <option value="">Kalite Kontrol seçin...</option>
                     </select>
                 </div>
                 <div>
                     <h3>Blok - Kat</h3>
-                    <select id="projectSelect" asp-items="@(new SelectList(Model.Projects, "Id","DisplayText"))">
-                        <option value="">Blok - Kat seçin...</option>
+                    <select id="project1Select" asp-items="@(new SelectList(Model.Projects, "Id","DisplayText"))">
+                        <option value="">Önce Kalite Kontrol Seçin...</option>
                     </select>
                 </div>
                 <div>
@@ -369,28 +374,29 @@
             });
         });
 
-        // Category3 değişikliğinde Category4'ü güncelle
-        // $('#category3Select').change(function () {
-        //     var selectedCategoryId = $(this).val();
+        // Kalite Kontrol Forma Göre Proje Gelmesi
+        $('#company1Select').change(function () {
+            var selectedProjectId = $(this).val();
 
-        //     $.ajax({
-        //         url: '@Url.Action("GetCategory4Data", "Form")',
-        //         type: 'GET',
-        //         data: { parentId: selectedCategoryId },
-        //         success: function (data) {
-        //             var category4Select = $('#category4Select');
-        //             category4Select.empty();
-        //             category4Select.append($('<option>', { value: '', text: 'Kategori 4 seçin...' }));
+            $.ajax({
+                url: '@Url.Action("GetProjectData", "Form")',
+                type: 'GET',
+                data: { projectBlockDef: selectedProjectId },
+                success: function (data) {
+                    console.log(data);
+                    var project1Select = $('#project1Select');
+                    project1Select.empty();
+                    project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol Form seçin...' }));
 
-        //             $.each(data, function (index, item) {
-        //                 category3Select.append($('<option>', {
-        //                     value: item.id,
-        //                     text: item.description
-        //                 }));
-        //             });
-        //         }
-        //     });
-        // });
+                    $.each(data, function (index, item) {
+                        project1Select.append($('<option>', {
+                            value: item.id,
+                            text: item.displayText
+                        }));
+                    });
+                }
+            });
+        });
     });
 </script>
 
