@@ -95,7 +95,7 @@
 
         /* New styles for question list */
         .question-list {
-            background-color:white; /* Beyaz renk ve yarı şeffaf arka plan */
+            background-color: white; /* Beyaz renk ve yarı şeffaf arka plan */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -123,14 +123,119 @@
             font-weight: bold;
             color: black;
         }
+        /* Dark Mode Stilleri */
+        .dark-mode {
+            background-color: #121212; /* Koyu arka plan rengi */
+            color: #ffffff; /* Açık metin rengi */
+        }
+
+            .dark-mode h1, .dark-mode h3 {
+                color: #ffffff;
+            }
+
+
+
+            .dark-mode .question-list {
+                background-color: #333333; /* Form için koyu arka plan */
+            }
+        /* Diğer dark mode stillerini buraya ekleyebilirsiniz */
+
+        /* Dark Mode Butonu */
+        .dark-mode-button {
+            background-color: #333333;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
+    <style>
+        /* Switch Button Stilleri */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Yuvarlak Slider */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+
+        /* Dark Mode Stilleri (Yukarıdakiyle aynı) */
+        .dark-mode {
+            /* Dark mode stilleri... */
+        }
+    </style>
+
 </head>
 
 <body>
+
+
     <form method="post">
+
         <h1>Kalite Kontrol Anketi</h1>
         <div class="col-12">
             <div class="col-12">
+                <!-- Dark Mode Switch -->
+                <div style="display: flex; align-items: center; margin-bottom:20px;">
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <label for="darkModeToggle" style="margin-left: 10px;font-weight:600;"><h4>Dark Mode</h4></label>
+                </div>
                 <div>
                     <h3>Kalite Kontrol</h3>
                     <select id="company1Select" asp-items="@(new SelectList(Model.Companies,"ProjectBlockDefId",  "ControlName","SurveyId"))">
@@ -146,7 +251,7 @@
                 <div>
                     <h3>Kategori-1</h3>
                     <select id="category1Select" asp-items="@(new SelectList(Model.Categories1, "Id", "Description"))">
-                        <option value="">Kategori 1 seçin...</option>
+                        <option value="">Önce Kategori 1 seçin...</option>
                     </select>
                 </div>
 
@@ -167,11 +272,13 @@
                 <div>
                     <h3>İmalat Adı</h3>
                     <select id="categorySelect" asp-items="@(new SelectList(Model.Categories4, "Id", "Description"))">
-                        <option value="">Kategori4 seçin...</option>
+                        <option value="">Önce İmalat Grubu seçin...</option>
                     </select>
                 </div>
                 <div style="flex-basis: 100%;">
                     <button id="listeleButton" type="button" class="bg-primary">Soruları Listele</button>
+
+
                 </div>
 
                 <!-- Question list section, initially hidden -->
@@ -189,73 +296,67 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalLabel">Anket Sonucu</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <div class="modal-body">
                         Anketiniz başarıyla kaydedilmiştir.
-                    </div>
-                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tamam</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-  
+
 </body>
 
 
 
 <script>
     $(document).ready(function () {
-                $('#listeleButton').click(function () {
-                    var category1Id = $('#category1Select').val();
-                    var category2Id = $('#category2Select').val();
-                    var category3Id = $('#category3Select').val();
+        $('#listeleButton').click(function () {
+            var category1Id = $('#category1Select').val();
+            var category2Id = $('#category2Select').val();
+            var category3Id = $('#category3Select').val();
 
-                    $.ajax({
-                        url: '@Url.Action("GetQuestionData", "Form")',
-                        type: 'GET',
-                        data: {
-                            category1Id: category1Id,
-                            category2Id: category2Id,
-                            category3Id: category3Id
-                        },
-                        success: function (questions) {
-                            console.log(questions); // Gelen veriyi konsolda inceleyin
+            $.ajax({
+                url: '@Url.Action("GetQuestionData", "Form")',
+                type: 'GET',
+                data: {
+                    category1Id: category1Id,
+                    category2Id: category2Id,
+                    category3Id: category3Id
+                },
+                success: function (questions) {
+                    console.log(questions); // Gelen veriyi konsolda inceleyin
 
-                            var list = $('#questionList ul');
-                            list.empty(); // Mevcut listeyi temizle
+                    var list = $('#questionList ul');
+                    list.empty(); // Mevcut listeyi temizle
 
-                            $.each(questions, function (index, question) {
-                                var li = $('<li>');
-                                li.append(document.createTextNode(question.question_Text));
-                                li.append($('<br>'));
-                                // Radyo butonları ekle
-                                var radioAccept = $('<input>', { type: 'radio', name:question.id, value: 'accept' , required: true});
-                                var radioReject = $('<input>', { type: 'radio', name:question.id, value: 'reject', css: { marginLeft: '10px' } });
+                    $.each(questions, function (index, question) {
+                        var li = $('<li>');
+                        li.append(document.createTextNode(question.question_Text));
+                        li.append($('<br>'));
+                        // Radyo butonları ekle
+                        var radioAccept = $('<input>', { type: 'radio', name: question.id, value: 'accept', required: true });
+                        var radioReject = $('<input>', { type: 'radio', name: question.id, value: 'reject', css: { marginLeft: '10px' } });
 
 
-                                li.append(radioAccept);
+                        li.append(radioAccept);
 
-                                li.append($('<label>').text('Kabul').css('color', 'green'));
+                        li.append($('<label>').text('Kabul').css('color', 'green'));
 
-                                li.append(radioReject);
-                                li.append($('<label>').text('Red').css('color', 'red'));
+                        li.append(radioReject);
+                        li.append($('<label>').text('Red').css('color', 'red'));
 
-                                list.append(li);
-                            });
-
-                            $('#questionList').show(); // Soru listesini göster
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Hata:", error);
-                        }
+                        list.append(li);
                     });
-                });
+
+                    $('#questionList').show(); // Soru listesini göster
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata:", error);
+                }
             });
+        });
+    });
 </script>
 
 <script>
@@ -335,67 +436,71 @@
 
 </script>
 <script>
-        function submitForm() {
-                // get survey id
-            var companies = @Html.Raw(Json.Serialize(Model.Companies));
-            var name = $('#company1Select option:selected').text();
-            var selectedCompany = companies.filter(c => c.controlName == name);
-            console.log(selectedCompany);
-            var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
-            console.log(surveyId);
-                //get floor id
-            var projects = @Html.Raw(Json.Serialize(Model.Projects));
-            var displayText = $('#project1Select option:selected').text();
-            var selectedProject = projects.filter(c => c.displayText == displayText);
-            console.log(selectedProject);
-            var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
-            console.log(floorId);
-            var formData = {
-                surveyId: surveyId,
-                floorId: floorId,
-                  
-                        questions: []  // Array to hold questions and their answers
-            };
+    function submitForm() {
+        // get survey id
+        var companies = @Html.Raw(Json.Serialize(Model.Companies));
+        var name = $('#company1Select option:selected').text();
+        var selectedCompany = companies.filter(c => c.controlName == name);
+        console.log(selectedCompany);
+        var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
+        console.log(surveyId);
+        //get floor id
+        var projects = @Html.Raw(Json.Serialize(Model.Projects));
+        var displayText = $('#project1Select option:selected').text();
+        var selectedProject = projects.filter(c => c.displayText == displayText);
+        console.log(selectedProject);
+        var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
+        console.log(floorId);
+        var formData = {
+            surveyId: surveyId,
+            floorId: floorId,
 
-            $('#questionItems li').each(function () {
-                
-                debugger;
-                var selectedRadio = $(this).find('input[type="radio"]:checked');
-                if (selectedRadio.length > 0) {
-                   var questionId1 = selectedRadio.attr('name');
-                    var questionId =Number(questionId1);
-                    var answer = selectedRadio.val();
+            questions: []  // Array to hold questions and their answers
+        };
 
-                    formData.questions.push({
+        $('#questionItems li').each(function () {
+
+            debugger;
+            var selectedRadio = $(this).find('input[type="radio"]:checked');
+            if (selectedRadio.length > 0) {
+                var questionId1 = selectedRadio.attr('name');
+                var questionId = Number(questionId1);
+                var answer = selectedRadio.val();
+
+                formData.questions.push({
                     questionId: questionId,
-                        answer: answer
+                    answer: answer
                 });
             }
-            });
-            console.log(JSON.stringify(formData));
-            // AJAX POST request
-            $.ajax({
-                url: '@Url.Action("SubmitSurvey", "Form")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    // Modal pencereyi göster
-                    $('#successModal').modal('show');
-                    // Form gönderme butonunu devre dışı bırak
-                    $('#save-button').prop('disabled', true);
-                },
-                error: function (error) {
-                    // Error handling here
-                    alert('Bir hata oluştu. Anket kaydedilemedi.');
-                }
-            });
-        }
-    
+        });
+        console.log(JSON.stringify(formData));
+        // AJAX POST request
+        $.ajax({
+            url: '@Url.Action("SubmitSurvey", "Form")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                // Modal pencereyi göster
+                $('#successModal').modal('show');
+                // Form gönderme butonunu devre dışı bırak
+                $('#save-button').prop('disabled', true);
+                // Kısa bir gecikme sonrasında sayfayı yenile
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000); // 3000 milisaniye = 3 saniye
+            },
+            error: function (error) {
+                // Error handling here
+                alert('Bir hata oluştu. Anket kaydedilemedi.');
+            }
+        });
+    }
+
 </script>
 
 
-
+@* 
 <script>
     $('#successModal').on('hidden.bs.modal', function (e) {
         // Sayfayı yenileyin
@@ -404,4 +509,14 @@
         // Veya isteğe bağlı olarak başka bir sayfaya yönlendirin
         // window.location.href = 'yeniSayfaURLsi';
     });
+</script> *@
+
+<script>
+    $(document).ready(function () {
+        // Dark mode toggle için event listener
+        $('#darkModeToggle').change(function () {
+            $('body').toggleClass('dark-mode');
+        });
+    });
 </script>
+
