@@ -15,6 +15,25 @@ namespace QuailtyForm.Data
         {
             ConnectionString = connectionString;
         }
+  
+        public void ExecuteQuery(string query, OracleParameter[] parameters)
+        {
+            using (OracleConnection connection = new OracleConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (OracleCommand command = new OracleCommand(query, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
 
         public List<Company> GetCompany()
         {

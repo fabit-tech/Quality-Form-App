@@ -2,6 +2,12 @@
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Önce jQuery -->
+    <script src="https://code.jquery.com/jquery-3.x.x.min.js"></script>
+
+    <!-- Sonra Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.x.x/js/bootstrap.min.js"></script>
+
 
     <!-- Select2 CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -89,7 +95,7 @@
 
         /* New styles for question list */
         .question-list {
-            background-color: #ffffff;
+            background-color:white; /* Beyaz renk ve yarı şeffaf arka plan */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -101,6 +107,11 @@
             .question-list ul {
                 list-style-type: none;
                 padding: 0;
+                background-image: url('https://fabitech.com.tr/sign/Logo-Yatay-Mor.png'); /* Arka plan resmi */
+                background-color: rgba(255, 255, 255, 0.8); /* Beyaz renk ve yarı şeffaf arka plan */
+                background-blend-mode: color-dodge; /* Arka plan resmi ve rengi arasında karışım modu */
+                background-size: cover; /* Arka plan resmini kaplayacak şekilde ayarla */
+                background-position: center; /* Arka plan resmini merkeze al */
             }
 
             .question-list li {
@@ -173,8 +184,26 @@
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Anket Sonucu</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Anketiniz başarıyla kaydedilmiştir.
+                    </div>
+                     <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tamam</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+  
 </body>
 
 
@@ -351,8 +380,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function (response) {
-                    // Success logic here
-                    alert('Anket başarıyla kaydedildi.');
+                    // Modal pencereyi göster
+                    $('#successModal').modal('show');
+                    // Form gönderme butonunu devre dışı bırak
+                    $('#save-button').prop('disabled', true);
                 },
                 error: function (error) {
                     // Error handling here
@@ -365,4 +396,12 @@
 
 
 
+<script>
+    $('#successModal').on('hidden.bs.modal', function (e) {
+        // Sayfayı yenileyin
+        window.location.reload();
 
+        // Veya isteğe bağlı olarak başka bir sayfaya yönlendirin
+        // window.location.href = 'yeniSayfaURLsi';
+    });
+</script>

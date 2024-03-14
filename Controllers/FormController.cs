@@ -106,7 +106,7 @@ namespace QuailtyForm.Controllers
             OracleDataAccess da = new OracleDataAccess(connectionString);
 
             var questions3Data = da.GetQuestion(category1Id, category2Id, category3Id);
-            return Json(questions3Data); 
+            return Json(questions3Data);
         }
 
         [HttpGet]
@@ -125,16 +125,32 @@ namespace QuailtyForm.Controllers
         {
             var connectionString = _configuration.GetConnectionString("OracleDbConnection");
             OracleDataAccess da = new OracleDataAccess(connectionString);
-            //try
-            //{
+            try
+            {
+                // Soru ve cevapları kaydet
+                foreach (var qa in surveyData.Questions)
+                {
+                    string questionInsertQuery = " INSERT INTO ZZZT_QUALITY_FORMS_ANSWERS (QUESTION_ID,SURVEY_ID,FLOOR_ID,DESCRIPTION) VALUES (:QuestionId,:SurveyId,:FloorId,:Answer)";
+                    var questionParameters = new OracleParameter[]
+                    {
+                        new OracleParameter("QuestionId", qa.QuestionId),
+                        new OracleParameter("SurveyId", surveyData.SurveyId),
+                        new OracleParameter("FloorId", surveyData.FloorId),
+                        new OracleParameter("Answer", qa.Answer)
+                    };
 
-            //}
-            //catch (Exception ex)
-            //{
+                    da.ExecuteQuery(questionInsertQuery, questionParameters);
+                }
 
-            //    throw ex;
-            //}
-            return Json(new { success = true, message = "Anket başarıyla kaydedildi." });
+                return Json(new { success = true, message = "Anket başarıyla kaydedildi." });
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = "Anket kaydedilmedi." +"Hata Mesajı:"+ ex });
+            }
+          
         }
 
         // GET: Anket/Basarili
