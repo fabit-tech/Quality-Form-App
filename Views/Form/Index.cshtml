@@ -2,24 +2,28 @@
 
 <head>
 
-    <!-- jQuery kütüphanesi, sadece bir kere ekleyin -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Önce jQuery -->
+    <script src="https://code.jquery.com/jquery-3.x.x.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Sonra Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.x.x/js/bootstrap.min.js"></script>
+
+
+    <!-- Select2 CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- my css-->
     <link href="~/css/my.css" rel="stylesheet" />
     <link href="~/css/switch.css" rel="stylesheet" />
    
 
 
-    <!-- Select2 CSS, özel stilizasyon için gerekli -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-    <!-- Select2 JS, jQuery'den sonra yüklenmeli -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-   
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   
 </head>
 
@@ -110,10 +114,131 @@
 
 </body>
 
+<script>
+    $(document).ready(function () {
+        $('#listeleButton').click(function () {
+            var category1Id = $('#category1Select').val();
+            var category2Id = $('#category2Select').val();
+            var category3Id = $('#category3Select').val();
 
-<script src="~/js/action.js"></script>
-<script src="~/js/style.js"></script>
+            $.ajax({
+                url: '@Url.Action("GetQuestionData", "Form")',
+                type: 'GET',
+                data: {
+                    category1Id: category1Id,
+                    category2Id: category2Id,
+                    category3Id: category3Id
+                },
+                success: function (questions) {
+                    console.log(questions); // Gelen veriyi konsolda inceleyin
 
+                    var list = $('#questionList ul');
+                    list.empty(); // Mevcut listeyi temizle
+
+                    $.each(questions, function (index, question) {
+                        var li = $('<li>');
+                        li.append(document.createTextNode(question.question_Text));
+                        li.append($('<br>'));
+                        // Radyo butonları ekle
+                        var radioAccept = $('<input>', { type: 'radio', name: question.id, value: 'accept', required: true });
+                        var radioReject = $('<input>', { type: 'radio', name: question.id, value: 'reject', css: { marginLeft: '10px' } });
+
+
+                        li.append(radioAccept);
+
+                        li.append($('<label>').text('Kabul').css('color', 'green'));
+
+                        li.append(radioReject);
+                        li.append($('<label>').text('Red').css('color', 'red'));
+
+                        list.append(li);
+                    });
+
+                    $('#questionList').show(); // Soru listesini göster
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata:", error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Category1 değişikliğinde Category2'yi güncelle
+        $('#category1Select').change(function () {
+            var selectedCategoryId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetCategory2Data", "Form")',
+                type: 'GET',
+                data: { parentId: selectedCategoryId },
+                success: function (data) {
+                    var category2Select = $('#category2Select');
+                    category2Select.empty();
+                    category2Select.append($('<option>', { value: '', text: 'Kategori 2 seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        category2Select.append($('<option>', {
+                            value: item.id,
+                            text: item.description
+                        }));
+                    });
+                }
+            });
+        });
+
+        // Category2 değişikliğinde Category3'ü güncelle
+        $('#category2Select').change(function () {
+            var selectedCategoryId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetCategory3Data", "Form")',
+                type: 'GET',
+                data: { parentId: selectedCategoryId },
+                success: function (data) {
+                    var category3Select = $('#category3Select');
+                    category3Select.empty();
+                    category3Select.append($('<option>', { value: '', text: 'Kategori 3 seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        category3Select.append($('<option>', {
+                            value: item.id,
+                            text: item.description
+                        }));
+                    });
+                }
+            });
+        });
+
+        // Kalite Kontrol Forma göre Kat Blok Seçme
+        $('#company1Select').change(function () {
+            var selectedProjectId = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("GetProjectData", "Form")',
+                type: 'GET',
+                data: { projectBlockDef: selectedProjectId },
+                success: function (data) {
+                    var project1Select = $('#project1Select');
+                    project1Select.empty();
+                    project1Select.append($('<option>', { value: '', text: 'Kalite Kontrol seçin...' }));
+
+                    $.each(data, function (index, item) {
+                        project1Select.append($('<option>', {
+                            value: item.id,
+                            text: item.displayText
+                        }));
+                    });
+                }
+            });
+        });
+
+    });
+
+
+</script>
 <script>
     function submitForm() {
         // get survey id
@@ -179,6 +304,25 @@
 </script>
 
 
+@*
+<script>
+    $('#successModal').on('hidden.bs.modal', function (e) {
+        // Sayfayı yenileyin
+        window.location.reload();
+
+        // Veya isteğe bağlı olarak başka bir sayfaya yönlendirin
+        // window.location.href = 'yeniSayfaURLsi';
+    });
+</script> *@
+
+<script>
+    $(document).ready(function () {
+        // Dark mode toggle için event listener
+        $('#darkModeToggle').change(function () {
+            $('body').toggleClass('dark-mode');
+        });
+    });
+</script>
 
 
 
