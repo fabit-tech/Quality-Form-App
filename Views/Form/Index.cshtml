@@ -257,40 +257,40 @@
                 <div>
                     <h3>Kalite Kontrol</h3>
                     <select id="company1Select" asp-items="@(new SelectList(Model.Companies,"ProjectBlockDefId",  "ControlName","SurveyId"))">
-                        <option value="">Kalite Kontrol seçin...</option>
+                        <option value="">Kaydı seçin...</option>
                     </select>
                 </div>
                 <div>
                     <h3>Blok - Kat</h3>
                     <select id="project1Select" asp-items="@(new SelectList(Model.Projects, "BlockDefDId","DisplayText"))">
-                        <option value="">Önce Kalite Kontrol Seçin...</option>
+                        <option value="">Önce Kalite Kontrol kaydını Seçin...</option>
                     </select>
                 </div>
                 <div>
                     <h3>Kategori-1</h3>
                     <select id="category1Select" asp-items="@(new SelectList(Model.Categories1, "Id", "Description"))">
-                        <option value="">Kategori 1 seçin...</option>
+                        <option value="">Kategori 1 kaydını seçin...</option>
                     </select>
                 </div>
 
                 <div>
                     <h3>Kategori-2</h3>
                     <select id="category2Select">
-                        <option value="">Önce Kategori 1 seçin...</option>
+                        <option value="">Önce Kategori 1 kaydını seçin...</option>
                     </select>
                 </div>
 
                 <div>
                     <h3>İmalat Grubu</h3>
                     <select id="category3Select">
-                        <option value="">Önce Kategori 2 seçin...</option>
+                        <option value="">Önce Kategori 2 kaydını seçin...</option>
                     </select>
                 </div>
 
                 <div>
                     <h3>İmalat Adı</h3>
                     <select id="categorySelect" asp-items="@(new SelectList(Model.Categories4, "Id", "Description"))">
-                        <option value="">Önce İmalat Grubu seçin...</option>
+                        <option value="">Önce İmalat Grubu kaydını seçin...</option>
                     </select>
                 </div>
                 <div style="flex-basis: 100%;">
@@ -536,5 +536,11 @@
             $('body').toggleClass('dark-mode');
         });
     });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#company1Select, #project1Select, #category1Select, #category2Select, #category3Select, #categorySelect').select2();
+    });
+
 </script>
 
