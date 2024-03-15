@@ -114,7 +114,69 @@
 <script src="~/js/action.js"></script>
 <script src="~/js/style.js"></script>
 
+<script>
+    function submitForm() {
+        // get survey id
+        var companies = @Html.Raw(Json.Serialize(Model.Companies));
+        var name = $('#company1Select option:selected').text();
+        var selectedCompany = companies.filter(c => c.controlName == name);
+        console.log(selectedCompany);
+        var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
+        console.log(surveyId);
+        //get floor id
+        var projects = @Html.Raw(Json.Serialize(Model.Projects));
+        var displayText = $('#project1Select option:selected').text();
+        var selectedProject = projects.filter(c => c.displayText == displayText);
+        console.log(selectedProject);
+        var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
+        console.log(floorId);
+        var formData = {
+            surveyId: surveyId,
+            floorId: floorId,
 
+            questions: []  // Array to hold questions and their answers
+        };
+
+        $('#questionItems li').each(function () {
+
+            debugger;
+            var selectedRadio = $(this).find('input[type="radio"]:checked');
+            if (selectedRadio.length > 0) {
+                var questionId1 = selectedRadio.attr('name');
+                var questionId = Number(questionId1);
+                var answer = selectedRadio.val();
+
+                formData.questions.push({
+                    questionId: questionId,
+                    answer: answer
+                });
+            }
+        });
+        console.log(JSON.stringify(formData));
+        // AJAX POST request
+        $.ajax({
+            url: '@Url.Action("SubmitSurvey", "Form")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                // Modal pencereyi göster
+                $('#successModal').modal('show');
+                // Form gönderme butonunu devre dışı bırak
+                $('#save-button').prop('disabled', true);
+                // Kısa bir gecikme sonrasında sayfayı yenile
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000); // 3000 milisaniye = 3 saniye
+            },
+            error: function (error) {
+                // Error handling here
+                alert('Bir hata oluştu. Anket kaydedilemedi.');
+            }
+        });
+    }
+
+</script>
 
 
 
