@@ -1,8 +1,9 @@
 ﻿body {
-    background-image: url('https://fabitech.com.tr/assets/media/logos/constructor-form.png'); /* Arka plan resmi */
+    /*background-image: url('https://fabitech.com.tr/assets/media/logos/constructor-form.png');*/ /* Arka plan resmi */
+    background-image: url('../bacground_img.png'); /* Arka plan resmi */
     background-color: rgba(255, 255, 255, 0.3); /* Beyaz renk ve yarı şeffaf arka plan */
     background-blend-mode: color-dodge; /* Arka plan resmi ve rengi arasında karışım modu */
-    background-size: cover; /* Arka plan resmini kaplayacak şekilde ayarla */
+    background-size: contain; /* Arka plan resmini kaplayacak şekilde ayarla */
     background-position: center; /* Arka plan resmini merkeze al */
     font-family: Arial, sans-serif;
     padding: 20px;
@@ -12,10 +13,10 @@
 }
 
 form {
-    background-color: #f4f4f4;
+    background-color: rgba(255, 255, 255, 0.6);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), inset 0px 0px 10px rgba(255, 255, 255, 0.3);
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -31,13 +32,13 @@ form {
     }
 
 h1 {
-    color: #333333;
+    color: #565959;
     margin-bottom: 0.5em;
     text-align: center; /* Add this line to center the text */
 }
 
 h3 {
-    color: #333333;
+    color: #565959;
     margin-bottom: 0.5em;
     align-items: center;
 }
@@ -103,7 +104,7 @@ button {
 
 h1, h3 {
     font-weight: bold;
-    color: black;
+    color: #565959;
 }
 /* Dark Mode Stilleri */
 .dark-mode {
@@ -117,6 +118,7 @@ h1, h3 {
 
     .dark-mode form {
         background-color: #333333;
+        opacity:0.6;
     }
 
     .dark-mode select {
