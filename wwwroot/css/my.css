@@ -1,6 +1,6 @@
 ﻿body {
     /*background-image: url('https://fabitech.com.tr/assets/media/logos/constructor-form.png');*/ /* Arka plan resmi */
-    background-image: url('../bacground_img.png'); /* Arka plan resmi */
+    /*background-image: url('../bacground_img.png');*/ /* Arka plan resmi */
     background-color: rgba(255, 255, 255, 0.3); /* Beyaz renk ve yarı şeffaf arka plan */
     background-blend-mode: color-dodge; /* Arka plan resmi ve rengi arasında karışım modu */
     background-size: contain; /* Arka plan resmini kaplayacak şekilde ayarla */
