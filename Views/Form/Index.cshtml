@@ -19,7 +19,8 @@
 
     <!-- my css-->
     <link href="~/css/my.css" rel="stylesheet" />
-    <link href="~/css/switch.css" rel="stylesheet" />
+@*     <link href="~/css/button.css" rel="stylesheet" />
+ *@    <link href="~/css/switch.css" rel="stylesheet" />
    
 
 
@@ -41,7 +42,8 @@
                 <!-- Dark Mode Switch -->
                 <div style="display: flex; align-items: center; margin-bottom:50px;">
                     <label class="switch">
-                        <input type="checkbox" id="darkModeToggle">
+                       
+                        <input id="darkModeToggle" class="pristine" type="checkbox" name="toggle" value="on">
                         <span class="slider round"></span>
                     </label>
                     <label for="darkModeToggle" style="margin-left: 10px;font-weight:bold;"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-moon-fill" viewBox="0 0 24 16">  <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" /></svg></label>
@@ -324,8 +326,17 @@
         $('#darkModeToggle').change(function () {
             $('body').toggleClass('dark-mode');
         });
+
     });
 </script>
 
 
+<script>
+    $(document).on('click', function (e) {
+        let tar = $(e.target);
+        if (tar.attr('name') === 'toggle') {
+            tar.removeAttr('class');
+        }
+    });
 
+</script>

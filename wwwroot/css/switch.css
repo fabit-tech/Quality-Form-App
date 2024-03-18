@@ -1,65 +1,140 @@
-﻿/* Switch Button Stilleri */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+﻿input {
+    font: 60px/1.5 sans-serif; /* Reduced by 25% from 80px */
 }
 
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+    input[type=checkbox]:before {
+        background-image: linear-gradient(90deg, #f1f2f3 1.5px, #f1f2f300 1.5px), linear-gradient(#f1f2f3 1.5px, #fff 1.5px);
+        background-repeat: repeat;
+        background-size: 0.5625em 0.28125em; /* Reduced by 25% */
     }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
+    input[type=checkbox] {
+        --off: #c7cad1;
+        --mid: #829ad6;
+        --on: #255ff4;
+        --transDur: 0.5s;
+        --timing: cubic-bezier(0.6,0,0.4,1);
+        animation: bgOff var(--transDur) var(--timing);
+        background-color: var(--off);
+        border-radius: 0.5em / 0.375em; /* Reduced by 25% */
+        box-shadow: 0 0.0375em 0.075em #00000007 inset, 0 -0.1875em 0.1875em #0001 inset, 0 -0.375em 0 #0001 inset, 0 0.075em 0.075em #0001;
+        cursor: pointer;
+        position: relative;
+        width: 1.5em; /* Reduced by 25% from 2em */
+        height: 1.125em; /* Reduced by 25% from 1.5em */
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
     }
 
-input:checked + .slider {
-    background-color: #2196F3;
-}
+        input[type=checkbox]:before {
+            animation: handleOff var(--transDur) var(--timing);
+            background-attachment: fixed;
+            background-position: 50% calc(50% - 0.14em);
+            border-radius: 0.375em / 0.28125em; /* Reduced by 25% */
+            box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--off) inset, 0 0.35625em 0.075em #0001 inset;
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0.09375em; /* Reduced by 25% */
+            left: 0.09375em; /* Reduced by 25% */
+            width: 0.75em; /* Reduced by 25% */
+            height: 0.5625em; /* Reduced by 25% */
+        }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
+        input[type=checkbox]:checked {
+            animation: bgOn var(--transDur) var(--timing) forwards;
+        }
 
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
+            input[type=checkbox]:checked:before {
+                animation: handleOn var(--transDur) var(--timing) forwards;
+            }
 
-/* Yuvarlak Slider */
-.slider.round {
-    border-radius: 34px;
-}
+        input[type=checkbox]:focus {
+            outline: none;
+        }
 
-    .slider.round:before {
-        border-radius: 50%;
+        input[type=checkbox].pristine, input[type=checkbox].pristine:before {
+            animation: none;
+        }
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    input[type=checkbox]:before {
+        background-image: linear-gradient(90deg, #3a3d46 1.5px, #3a3d4600 1.5px), linear-gradient(#3a3d46 1.5px, #2e3138 1.5px);
     }
 
-/* Dark Mode Stilleri (Yukarıdakiyle aynı) */
-.dark-mode {
-    /* Dark mode stilleri... */
+    input[type=checkbox] {
+        --off: #5c6270;
+        --mid: #3d5fb6;
+    }
+}
+
+/* Animations */
+@keyframes bgOff {
+    from {
+        background-color: var(--on);
+    }
+
+    50% {
+        background-color: var(--mid);
+    }
+
+    to {
+        background-color: var(--off);
+    }
+}
+
+@keyframes bgOn {
+    from {
+        background-color: var(--off);
+    }
+
+    50% {
+        background-color: var(--mid);
+    }
+
+    to {
+        background-color: var(--on);
+    }
+}
+
+@keyframes handleOff {
+    from {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--on) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.84375em; /* Adjusted from 1.125em */
+        width: 0.75em; /* Reduced by 25% */
+    }
+
+    50% {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--mid) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.09375em; /* Reduced by 25% */
+        width: 1.5em; /* Reduced by 25% */
+    }
+
+    to {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--off) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.09375em; /* Reduced by 25% */
+        width: 0.75em; /* Reduced by 25% */
+    }
+}
+
+@keyframes handleOn {
+    from {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--off) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.09375em; /* Reduced by 25% */
+        width: 0.75em; /* Reduced by 25% */
+    }
+
+    50% {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--mid) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.09375em; /* Reduced by 25% */
+        width: 1.5em; /* Reduced by 25% */
+    }
+
+    to {
+        box-shadow: 0 0.13125em 0.13125em 0 #0001 inset, 0 0.28125em 0 #0002 inset, 0 0.28125em 0 var(--on) inset, 0 0.35625em 0.075em #0001 inset;
+        left: 0.84375em; /* Adjusted from 1.125em */
+        width: 0.5625em; /* Reduced by 25% */
+    }
 }
