@@ -1,5 +1,5 @@
 ﻿input {
-    font: 60px/1.5 sans-serif; /* Reduced by 25% from 80px */
+    font: 30px/1.5 sans-serif; /* Reduced by 25% from 80px */
 }
 
     input[type=checkbox]:before {

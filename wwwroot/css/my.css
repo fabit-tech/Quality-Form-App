@@ -91,7 +91,7 @@ button {
         list-style-type: none;
         padding: 0;
         /*background-image: url('https://fabitech.com.tr/sign/Logo-Yatay-Mor.png');  Arka plan resmi */
-        background-color: #565959 /* Beyaz renk ve yarı şeffaf arka plan */
+        background-color: white /* Beyaz renk ve yarı şeffaf arka plan */
         background-blend-mode: color-dodge; /* Arka plan resmi ve rengi arasında karışım modu */
         background-size: cover; /* Arka plan resmini kaplayacak şekilde ayarla */
         background-position: center; /* Arka plan resmini merkeze al */
