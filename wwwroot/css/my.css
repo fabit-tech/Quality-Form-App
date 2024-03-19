@@ -90,8 +90,8 @@ button {
     .question-list ul {
         list-style-type: none;
         padding: 0;
-        background-image: url('https://fabitech.com.tr/sign/Logo-Yatay-Mor.png'); /* Arka plan resmi */
-        background-color: rgba(255, 255, 255, 0.8); /* Beyaz renk ve yarı şeffaf arka plan */
+        /*background-image: url('https://fabitech.com.tr/sign/Logo-Yatay-Mor.png');  Arka plan resmi */
+        background-color: #565959 /* Beyaz renk ve yarı şeffaf arka plan */
         background-blend-mode: color-dodge; /* Arka plan resmi ve rengi arasında karışım modu */
         background-size: cover; /* Arka plan resmini kaplayacak şekilde ayarla */
         background-position: center; /* Arka plan resmini merkeze al */
@@ -150,4 +150,3 @@ h1, h3 {
 .modal {
     overflow-y: auto;
 }
-

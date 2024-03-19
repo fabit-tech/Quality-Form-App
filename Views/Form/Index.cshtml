@@ -87,7 +87,7 @@
                     </select>
                 </div>
                 <div style="flex-basis: 100%;">
-                    <button id="listeleButton" type="button" class="placeholder-wave">Soruları Listele</button>
+                    <button id="listeleButton" type="button" onclick="listeleForm()" class="placeholder-wave">Soruları Listele</button>
 
 
                 </div>
@@ -119,8 +119,8 @@
 </body>
 
 <script>
-    $(document).ready(function () {
-        $('#listeleButton').click(function () {
+    function listeleForm() {
+
             var category1Id = $('#category1Select').val();
             var category2Id = $('#category2Select').val();
             var category3Id = $('#category3Select').val();
@@ -138,14 +138,14 @@
 
                     var list = $('#questionList ul');
                     list.empty(); // Mevcut listeyi temizle
-
+                    console.log(list);
                     $.each(questions, function (index, question) {
                         var li = $('<li>');
                         li.append(document.createTextNode(question.question_Text));
                         li.append($('<br>'));
                         // Radyo butonları ekle
-                        var radioAccept = $('<input>', { type: 'radio', name: question.id, value: 'accept', required: true });
-                        var radioReject = $('<input>', { type: 'radio', name: question.id, value: 'reject', css: { marginLeft: '10px' } });
+                    var radioAccept = $('<input>', { type: 'radio', name: question.id, value: 'accept',  required: true });
+                    var radioReject = $('<input>', { type: 'radio', name: question.id, value: 'reject',  css: { marginLeft: '10px' } });
 
 
                         li.append(radioAccept);
@@ -154,7 +154,8 @@
 
                         li.append(radioReject);
                         li.append($('<label>').text('Red').css('color', 'red'));
-
+                        li.append($('<br>'));
+                        li.append($('<br>'));
                         list.append(li);
                     });
 
@@ -164,8 +165,7 @@
                     console.error("Hata:", error);
                 }
             });
-        });
-    });
+        }
 </script>
 
 <script>
@@ -245,64 +245,88 @@
 </script>
 <script>
     function submitForm() {
-        // get survey id
-        var companies = @Html.Raw(Json.Serialize(Model.Companies));
-        var name = $('#company1Select option:selected').text();
-        var selectedCompany = companies.filter(c => c.controlName == name);
-        console.log(selectedCompany);
-        var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
-        console.log(surveyId);
-        //get floor id
-        var projects = @Html.Raw(Json.Serialize(Model.Projects));
-        var displayText = $('#project1Select option:selected').text();
-        var selectedProject = projects.filter(c => c.displayText == displayText);
-        console.log(selectedProject);
-        var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
-        console.log(floorId);
-        var formData = {
-            surveyId: surveyId,
-            floorId: floorId,
+        var allFieldsFilled = true;
 
-            questions: []  // Array to hold questions and their answers
-        };
+        // Tüm açılır menüleri kontrol et
+        $('#company1Select, #project1Select, #category1Select, #category2Select, #category3Select').each(function () {
+            if ($(this).val() === '') {
+                allFieldsFilled = false;
+            }
+        });
 
+        // Tüm sorular için radyo düğmelerini kontrol et
         $('#questionItems li').each(function () {
-
-            debugger;
-            var selectedRadio = $(this).find('input[type="radio"]:checked');
-            if (selectedRadio.length > 0) {
-                var questionId1 = selectedRadio.attr('name');
-                var questionId = Number(questionId1);
-                var answer = selectedRadio.val();
-
-                formData.questions.push({
-                    questionId: questionId,
-                    answer: answer
-                });
+            if ($(this).find('input[type="radio"]:checked').length === 0) {
+                allFieldsFilled = false;
             }
         });
-        console.log(JSON.stringify(formData));
-        // AJAX POST request
-        $.ajax({
-            url: '@Url.Action("SubmitSurvey", "Form")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            success: function (response) {
-                // Modal pencereyi göster
-                $('#successModal').modal('show');
-                // Form gönderme butonunu devre dışı bırak
-                $('#save-button').prop('disabled', true);
-                // Kısa bir gecikme sonrasında sayfayı yenile
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000); // 3000 milisaniye = 3 saniye
-            },
-            error: function (error) {
-                // Error handling here
-                alert('Bir hata oluştu. Anket kaydedilemedi.');
-            }
-        });
+        if (!allFieldsFilled) {
+            alert('Lütfen tüm alanları doldurunuz.');
+            return; // Fonksiyonu burada durdur
+        }
+        else {
+            // get survey id
+            var companies = @Html.Raw(Json.Serialize(Model.Companies));
+            var name = $('#company1Select option:selected').text();
+            var selectedCompany = companies.filter(c => c.controlName == name);
+            console.log(selectedCompany);
+            var surveyId = selectedCompany[0] ? selectedCompany[0].surveyId : null;
+            console.log(surveyId);
+            //get floor id
+            var projects = @Html.Raw(Json.Serialize(Model.Projects));
+            var displayText = $('#project1Select option:selected').text();
+            var selectedProject = projects.filter(c => c.displayText == displayText);
+            console.log(selectedProject);
+            var floorId = selectedProject[0] ? selectedProject[0].blockDefDId : null;
+            console.log(floorId);
+            var formData = {
+                surveyId: surveyId,
+                floorId: floorId,
+
+                questions: []  // Array to hold questions and their answers
+            };
+
+            $('#questionItems li').each(function () {
+
+                debugger;
+                var selectedRadio = $(this).find('input[type="radio"]:checked');
+                if (selectedRadio.length > 0) {
+                    var questionId1 = selectedRadio.attr('name');
+                    var questionId = Number(questionId1);
+                    var answer = selectedRadio.val();
+
+                    formData.questions.push({
+                        questionId: questionId,
+                        answer: answer
+                    });
+                }
+            });
+            console.log(JSON.stringify(formData));
+            // AJAX POST request
+            $.ajax({
+                url: '@Url.Action("SubmitSurvey", "Form")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    // Modal pencereyi göster
+                    $('#successModal').modal('show');
+                    // Form gönderme butonunu devre dışı bırak
+                    $('#save-button').prop('disabled', true);
+                    // Kısa bir gecikme sonrasında sayfayı yenile
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000); // 3000 milisaniye = 3 saniye
+
+                },
+                error: function (error) {
+                    // Error handling here
+                    alert('Bir hata oluştu. Anket kaydedilemedi.');
+                }
+            });
+
+        }
+
     }
 
 </script>
@@ -339,3 +363,4 @@
     });
 
 </script>
+
